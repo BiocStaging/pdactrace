@@ -35,3 +35,8 @@ figure/
 *.pptx
 *.docx
 *.xlsx
+
+# Sibling working trees and non-public material (kept out of the public repo)
+StageBridge/
+StageBridge_BIB_submission_20260717/
+public_cohort_overview/

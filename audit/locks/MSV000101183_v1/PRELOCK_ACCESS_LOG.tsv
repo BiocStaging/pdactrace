@@ -1,0 +1,5 @@
+timestamp_utc	resource	access_scope	outcome_rows_opened	purpose
+2026-07-17T14:01:02Z	https://doi.org/10.1002/cam4.71941	article text including public definitions and aggregate Table 1 counts	FALSE	verify outcome dictionary and aggregate condition totals
+2026-07-17T14:01:02Z	https://massive.ucsd.edu/ProteoSAFe/dataset.jsp?accession=MSV000101183	dataset description status task ID FTP root and aggregate summary	FALSE	verify public independent validation data
+2026-07-17T14:01:02Z	https://massive.ucsd.edu/ProteoSAFe/dataset_files.jsp?task=6aab5886577844e098bea31f835c4954	file names collections byte counts and numeric biological run structure	FALSE	verify label-blind preprocessing feasibility
+2026-07-17T14:01:02Z	MSV000101183/metadata/meta.csv	first header row only	FALSE	freeze exact metadata schema without sample assignments

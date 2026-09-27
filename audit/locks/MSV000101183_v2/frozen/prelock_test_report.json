@@ -1,0 +1,40 @@
+{
+  "created_utc": "2026-07-18 01:06:53 UTC",
+  "v1_1_lock_id": "710ad1251eb2cd7511bb53169430303f15ab3fd7208a32bc6448f18e5abc611d",
+  "v1_1_terminal_status": "INCONCLUSIVE_TECHNICAL_QC",
+  "outcome_rows_opened": false,
+  "raw_files_verified": 45,
+  "all_scans_itms": true,
+  "all_fragmentation_cid35": true,
+  "acquired_target_assays": 20,
+  "pooled_qc_all_targets_detected_5_of_5": true,
+  "pooled_qc_median_cv": 0.1208,
+  "pooled_qc_fraction_cv_le_0_30": 0.95,
+  "broad_window_biological_abundance_opened": false,
+  "environment_guard": "PASS",
+  "executable_test_suite": {
+    "checks": {
+      "amendment_chain": {
+        "precursor_tolerance_ppm": 20,
+        "product_half_window_da": 0.5,
+        "v1_1_outcome_rows_opened": false,
+        "v1_1_status": "INCONCLUSIVE_TECHNICAL_QC"
+      },
+      "python_and_outcome_boundary": {
+        "broad_window_biological_abundance_present": false,
+        "outcome_aliases": 8,
+        "outcome_markers_present": 0,
+        "python_version": "3.14.2"
+      },
+      "r_environment_acquisition_and_qc": {
+        "all_fragmentation_cid35": true,
+        "all_product_scans_itms": true,
+        "dictionary_mapped_targets": 20,
+        "frozen_pooled_qc_table_present": true,
+        "synthetic_technical_qc": "PASS",
+        "unique_precursor_schedules": 20
+      }
+    },
+    "status": "PASS"
+  }
+}

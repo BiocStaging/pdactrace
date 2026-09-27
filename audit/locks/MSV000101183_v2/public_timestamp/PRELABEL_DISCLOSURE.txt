@@ -1,0 +1,15 @@
+StageBridge MSV000101183 v2 outcome-blind prelabel disclosure
+Disclosure version: 2
+Prepared UTC: 2026-07-18 01:12:11 UTC
+
+LOCK_ID: b33a8601325df8ebc35f7788778bf27eaff735abf00e34880c37fff926245bb4
+PRELABEL_ID: 5aba19f56b1ff807acf2392a1ceafa7c6d185fec9f2a16255cfa1165b59acb56
+SHA-256 of prelabel_manifest_sha256.csv: 9ea4ee88c3c9e72c90c95f3c1028538f98cfae464f91d492a5732a14ba9406b2
+Biological samples: 40
+Frozen target assays: 20
+Eligible target assays: 20
+Technical QC: PASS
+Sample-level outcome rows opened: FALSE
+
+This payload binds abundance, assay eligibility, assay-conditional panels,
+RAW hashes, extraction software identity and the still-sealed metadata bytes.

@@ -1,0 +1,15 @@
+field	value	source
+lock_name	MSV000101183_v2	local outcome-blind namespace
+accession	MSV000101183	MassIVE
+specimen	human serum	public article and repository
+acquisition	ITMS CID targeted LC-MS/MS	label-blind RAW scan filters
+biological_runs	40	verified RAW inventory
+pooled_qc_runs	5	verified RAW inventory
+acquired_precursor_targets	20	shared label-blind scan schedule
+sealed_metadata_bytes	742	sealed metadata record
+sealed_metadata_sha256	88294963f5cdcbaa6e5c9625956b0a270a95068434376ce665a9a6ecce0a45ae	sealed metadata record
+outcome_rows_opened_before_lock	0	access audit
+product_half_window_da	0.5	pre-data v1 rule and PRODUCT_WINDOW_RULE.json
+precursor_tolerance_ppm	20	PRODUCT_WINDOW_RULE.json
+v1_1_terminal_status	INCONCLUSIVE_TECHNICAL_QC	v1.1 terminal disclosure
+biological_decision_rule_changed	FALSE	byte comparison

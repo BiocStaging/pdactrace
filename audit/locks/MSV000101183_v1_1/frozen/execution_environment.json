@@ -1,0 +1,27 @@
+{
+  "captured_utc": "2026-07-18 00:22:37 UTC",
+  "r_version": "R version 4.5.2 (2025-10-31)",
+  "r_platform": "aarch64-apple-darwin20",
+  "os": {
+    "sysname": "Darwin",
+    "release": "23.4.0",
+    "machine": "arm64"
+  },
+  "python_version": "Python 3.14.2",
+  "package_versions": {
+    "rawrr": "1.18.0",
+    "digest": "0.6.39",
+    "jsonlite": "2.0.0",
+    "limma": "3.66.0",
+    "data.table": "1.18.4"
+  },
+  "rawrr_assembly_version": "1.17.2",
+  "rawrr_assembly_path": "/Users/jibeomko/Library/Caches/org.R-project.R/R/rawrr/rawrrassembly/osx-x64/rawrr",
+  "rawrr_assembly_bytes": 116996414,
+  "rawrr_assembly_sha256": "8b0654c0632e038bbb90b786ec648115acf70fc9dff11ddadaee4adba1c299de",
+  "library_paths": [
+    "/private/tmp/stagebridge-Rlib",
+    "/Users/jibeomko/Library/R/arm64/4.5/library",
+    "/Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/library"
+  ]
+}

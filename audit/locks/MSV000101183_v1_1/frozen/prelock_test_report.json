@@ -1,0 +1,44 @@
+{
+  "created_utc": "2026-07-18 00:22:39 UTC",
+  "predecessor_manifest_paths": 33,
+  "predecessor_manifest_all_pass": true,
+  "predecessor_outcome_files_present": false,
+  "public_target_assays": 94,
+  "exact_theoretical_mappings": 93,
+  "invalid_target": "TGOLN2",
+  "maximum_product_rounding_delta_da": 0.0543,
+  "minimum_product_annotation_gap_da": 0.0327,
+  "stagebridge_absolute_top10_dictionary_targets": 0,
+  "environment_guard": "PASS",
+  "executable_test_suite": {
+    "checks": {
+      "protocol_documents": {
+        "outcome_access_after_qc_failure": false,
+        "product_tolerance_ppm": 20,
+        "technical_rule_version": 1
+      },
+      "python_and_outcome_mapping": {
+        "compiled_python_scripts": 3,
+        "outcome_aliases": 8,
+        "python_version": "3.14.2"
+      },
+      "r_chemistry_environment_and_qc": {
+        "invalid_target": "TGOLN2",
+        "maximum_product_delta_da": 0.0543,
+        "minimum_product_gap_da": 0.0327,
+        "public_assays": 94,
+        "stagebridge_absolute_top10_dictionary_targets": 0,
+        "synthetic_empty_runs": "INCONCLUSIVE_TECHNICAL_QC",
+        "synthetic_high_cv": "INCONCLUSIVE_TECHNICAL_QC",
+        "synthetic_low_detection": "INCONCLUSIVE_TECHNICAL_QC",
+        "synthetic_pass": "PASS",
+        "valid_exact_assays": 93
+      },
+      "unopened_state": {
+        "forbidden_paths_checked": 10,
+        "present": 0
+      }
+    },
+    "status": "PASS"
+  }
+}

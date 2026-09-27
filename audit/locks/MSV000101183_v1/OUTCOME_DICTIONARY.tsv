@@ -1,0 +1,9 @@
+source_term	normalized_source_term	canonical_condition	clinical_definition	primary_endpoint_role	pooled_secondary_role	dictionary_source	source_locator
+HC	hc	Healthy	healthy control	reference	reference	https://doi.org/10.1002/cam4.71941	Table 1 validation cohort
+Healthy	healthy	Healthy	healthy control	reference	reference	https://doi.org/10.1002/cam4.71941	Table 1 validation cohort
+Healthy Control	healthy control	Healthy	healthy control	reference	reference	https://doi.org/10.1002/cam4.71941	Table 1 validation cohort
+IPMC	ipmc	IPMC	IPMN-associated invasive carcinoma	excluded	case	https://doi.org/10.1002/cam4.71941	Sections 1 and 2.1; Table 1 footnote a
+IPMN-associated carcinoma	ipmn associated carcinoma	IPMC	IPMN-associated invasive carcinoma	excluded	case	https://doi.org/10.1002/cam4.71941	Sections 1 and 2.1
+IPMN-associated invasive carcinoma	ipmn associated invasive carcinoma	IPMC	IPMN-associated invasive carcinoma	excluded	case	https://doi.org/10.1002/cam4.71941	Sections 1 and 2.1
+PDAC	pdac	PDAC	pancreatic ductal adenocarcinoma without IPMN	case	case	https://doi.org/10.1002/cam4.71941	Table 1 footnote b
+Pancreatic ductal adenocarcinoma	pancreatic ductal adenocarcinoma	PDAC	pancreatic ductal adenocarcinoma without IPMN	case	case	https://doi.org/10.1002/cam4.71941	Sections 1 and 2.1; Table 1 footnote b

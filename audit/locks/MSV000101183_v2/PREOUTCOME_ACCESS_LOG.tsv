@@ -1,0 +1,8 @@
+timestamp_utc	resource	access_scope	outcome_rows_opened	purpose
+2026-07-17T14:01:02Z	public article and MassIVE inventory	outcome vocabulary aggregate counts file structure and metadata header	FALSE	prepare predecessor locks
+2026-07-18T00:26:33Z	MSV000101183_v1_1 lock disclosure	DigiCert RFC 3161 commitment before RAW access	FALSE	bind exact-mass protocol
+2026-07-18T00:28:00Z	MSV000101183 public RAW files	45 RAW byte streams and hashes; no Groups values	FALSE	label-blind extraction
+2026-07-18T00:42:00Z	v1.1 label-blind extraction	anonymous abundance mapping detection and pooled-QC metrics	FALSE	apply frozen technical gate
+2026-07-18T00:47:03Z	v1.1 technical terminal disclosure	DigiCert RFC 3161 commitment	FALSE	make technical failure terminal
+2026-07-18T00:50:00Z	v1.1 RAW scan metadata	precursor schedules and ITMS CID scan filters	FALSE	diagnose analyzer-resolution mismatch
+2026-07-18T00:50:00Z	five pooled-QC RAW files	original v1 0.5-Da product-window detection and CV only	FALSE	verify one technical amendment before v2

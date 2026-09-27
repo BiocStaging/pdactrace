@@ -1,0 +1,9 @@
+"method","input_information","external_outcome_used","validation_tuning_allowed"
+"mean_abs_z","PDAC discovery effect-table comparator",FALSE,FALSE
+"vote_count","PDAC discovery effect-table comparator",FALSE,FALSE
+"signed_stouffer","PDAC discovery effect-table comparator",FALSE,FALSE
+"intersection","PDAC discovery effect-table comparator",FALSE,FALSE
+"rank_product","PDAC discovery effect-table comparator",FALSE,FALSE
+"svd_loading","PDAC discovery effect-table comparator",FALSE,FALSE
+"observed_rank_product","PDAC discovery effect-table comparator",FALSE,FALSE
+"StageBridge","PDAC discovery effects plus label-free serum observability",FALSE,FALSE

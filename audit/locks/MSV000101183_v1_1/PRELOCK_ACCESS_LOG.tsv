@@ -1,0 +1,8 @@
+timestamp_utc	resource	access_scope	outcome_rows_opened	purpose
+2026-07-17T14:01:02Z	https://doi.org/10.1002/cam4.71941	article text including public definitions and aggregate Table 1 counts	FALSE	verify outcome dictionary and aggregate condition totals
+2026-07-17T14:01:02Z	https://massive.ucsd.edu/ProteoSAFe/dataset.jsp?accession=MSV000101183	dataset description status task ID FTP root and aggregate summary	FALSE	verify public independent validation data
+2026-07-17T14:01:02Z	https://massive.ucsd.edu/ProteoSAFe/dataset_files.jsp?task=6aab5886577844e098bea31f835c4954	file names collections byte counts and numeric biological run structure	FALSE	verify label-blind preprocessing feasibility
+2026-07-17T14:01:02Z	MSV000101183/metadata/meta.csv	first header row only	FALSE	freeze exact metadata schema without sample assignments
+2026-07-18T00:12:45Z	PXD067770/PRM_targets.csv	public source-study transition dictionary and peptide chemistry	FALSE	derive exact precursor and product masses before MSV validation access
+2026-07-18T00:12:45Z	MSV000101183_v1 frozen manifest and namespace	manifest hashes and absence of abundance metadata and decision files	FALSE	verify unopened predecessor before technical supersession
+2026-07-18T00:12:45Z	local execution environment	R Python package rawrr assembly versions and executable SHA-256	FALSE	pin reproducible environment before lock

@@ -1,0 +1,29 @@
+{
+  "lock_name": "MSV000101183_v2",
+  "accession": "MSV000101183",
+  "frozen_at_utc": "2026-07-18 01:06:53 UTC",
+  "protocol_class": "outcome-blind technical amendment after label-blind RAW/QC inspection",
+  "source_pdac_lock_id": "fe595c20d577b0ddea62c1a622a3be65d110e319e89d21e79a72700855927b3a",
+  "v1_1_lock_id": "710ad1251eb2cd7511bb53169430303f15ab3fd7208a32bc6448f18e5abc611d",
+  "v1_1_terminal_status": "INCONCLUSIVE_TECHNICAL_QC",
+  "sample_level_outcome_opened_before_lock": false,
+  "broad_window_biological_abundance_opened_before_lock": false,
+  "expected_counts": {
+    "Healthy": 20,
+    "IPMC": 4,
+    "PDAC": 16
+  },
+  "expected_biological_samples": 40,
+  "expected_pooled_qc_files": 5,
+  "acquired_target_assays": 20,
+  "product_analyzer": "ITMS low-resolution CID",
+  "precursor_tolerance_ppm": 20,
+  "product_half_window_da": 0.5,
+  "pooled_qc_median_cv": 0.1208,
+  "pooled_qc_fraction_cv_le_0_30": 0.95,
+  "target_relation": "concordant",
+  "primary_endpoint": "PDAC_vs_Healthy",
+  "biological_decision_rule_changed_from_v1_1": false,
+  "absolute_stagebridge_top20_targets_in_assay": 0,
+  "interpretation": "panel-conditional transport under an outcome-blind amendment"
+}

@@ -1,0 +1,21 @@
+{
+  "accession": "MSV000101183",
+  "expected_counts": {
+    "Healthy": 20,
+    "IPMC": 4,
+    "PDAC": 16
+  },
+  "interpretation_ceiling": "No performance estimate was produced because the timestamped outcome dictionary or aggregate count gate failed.",
+  "lock_id": "b33a8601325df8ebc35f7788778bf27eaff735abf00e34880c37fff926245bb4",
+  "mapping_issues": [
+    "pooled"
+  ],
+  "observed_counts": {
+    "Healthy": 20,
+    "IPMC": 4,
+    "PDAC": 16
+  },
+  "reason": "OUTCOME_SCHEMA_OR_COUNT_MISMATCH",
+  "statistical_runner_entered": false,
+  "status": "INCONCLUSIVE"
+}

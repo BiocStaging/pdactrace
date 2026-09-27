@@ -1,0 +1,18 @@
+{
+  "accession": "PXD067770",
+  "event": "one-shot outcome access terminally adjudicated",
+  "status": "INCONCLUSIVE",
+  "reason_code": "TIMESTAMPED_GROUP_MAPPING_MISMATCH",
+  "lock_id": "fe595c20d577b0ddea62c1a622a3be65d110e319e89d21e79a72700855927b3a",
+  "prelabel_manifest_sha256": "df860ffc41ed8ced20fef3914cce9f01b67a7cfca19c2b083c4e16b1cf8e9021",
+  "started_record_sha256": "738320222c41ea9e54fe6575274f4633731b543dd2a66ba7c6d65e787f08c56a",
+  "technical_failure_record_sha256": "0fe30dfee12ee0d950381c97566eff0242fec2edad6025c094121332d7aac6be",
+  "decision_sha256": "af383adf4c2ac7ef75eaaecfb9dc857e2347dc0a132b8f56878608aa683c585e",
+  "result_report_sha256": "3b64cc2f046ebfd9ebef41dea23402f0c2d3fafd97da2392c4f1ac5d90127270",
+  "started_utc": "2026-07-17T12:30:08Z",
+  "failed_utc": "2026-07-17T12:30:08Z",
+  "terminal_utc": "2026-07-17T12:31:33Z",
+  "statistical_runner_executed": false,
+  "performance_metrics_available": false,
+  "no_rerun": true
+}

@@ -489,6 +489,49 @@ attach those derived columns when a frozen derived atlas is needed.
 | `pdactrace_data_sources` | 26 contributing public datasets |
 | `inst/extdata/phase*.csv.xz` | Bundled downstream phase tables |
 
+
+# Prospectively frozen score layer and audit record
+
+Alongside the queryable atlas the package carries a **prespecification layer**:
+a candidate set, its scores, the expected tissue-to-serum direction and a
+decision rule can be frozen under a content hash and externally timestamped
+*before* any outcome label is opened. A frozen run is opened once. If a
+prespecified gate fails, the run terminates in a distinct **inconclusive**
+state and no performance statistic is computed; it is not rerun.
+
+The frozen PDAC layer lives in `data-raw/stagebridge/frozen/` and holds 1,356
+features — the Early-only RNA x protein intersection of `pdactrace_reference` —
+with `frozen_direction`, `target_relation` and `relation_status`.
+
+## What the record currently says
+
+Two external one-shot audits have been run against public serum proteomes using
+this frozen layer. **Both terminated inconclusive before any AUC or p-value was
+computed.**
+
+| Lock | Dataset | Endpoint | Terminal state |
+|---|---|---|---|
+| `MSV000101183` | MassIVE, serum | PDAC vs healthy control | inconclusive — label-blind technical QC gate failed |
+| `PXD067770` | PRIDE, serum | PDAC vs control | inconclusive — mapping/coverage gate mismatch |
+
+Both died at assay coverage: the frozen candidates were not detectable at the
+required depth in undepleted public serum. That is consistent with the known
+behaviour of the serum matrix, where only a small fraction of tumour tissue
+proteins is observable at all and secreted proteins are detected far more
+readily than intracellular ones.
+
+These two terminations are reported here deliberately. Any result derived from
+the frozen scores inherits them, and they are the documented reason a
+purpose-designed cohort is required rather than a further public deposit. The
+disclosure copies are in `audit/locks/`; see `audit/PROVENANCE.md` for the
+archive tag the locks verify against and why they must not be regenerated.
+
+## Scope
+
+This package is **PDAC-specific**. An earlier working tree extended the same
+machinery to LUAD, CRC and HCC; that scope is archived, not carried here, and
+none of its results are claimed by this package. See `audit/PROVENANCE.md`.
+
 # Function reference
 
 For every function, `?function_name` opens the full Rd page with
@@ -507,6 +550,7 @@ of the main user-facing exports:
 | **Reporting** | `report_gene` |
 | **Bioconductor-native** | `as_summarized_experiment`, `download_phase_csvs` |
 | **Schema + theme** | `schema_spec`, `pdactrace_axes_theme`, `pdactrace_panel_theme`, `pdactrace_save`, `pdactrace_pal_class`, `pdactrace_pal_group`, `pdactrace_pal_dir`, `pdactrace_pal_pattern`, `NCS_W_SINGLE`, `NCS_W_15COL`, `NCS_W_DOUBLE`, `NCS_W_TRIPLE` |
+| **Prespecification layer** | `stagebridge`, `sb_one_shot`, `sb_default_one_shot_rule`, `sb_pareto_fronts`, `sb_loco_stability`, `sb_observability`, `sb_validate_effects`, `sb_simulate`, `sb_method_scores`, `sb_multiblock_plsda_scores`, `sb_binary_auc`, `sb_average_precision`, `sb_topk_recall` |
 
 All plot functions return a `ggplot` object; save via
 `pdactrace_save(p, dir = "fig", name = "...", w = NCS_W_SINGLE)`

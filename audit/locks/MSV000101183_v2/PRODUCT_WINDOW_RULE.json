@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "precursor_center": "unique_theoretical_peptide_precursor",
+  "precursor_tolerance_ppm": 20,
+  "product_center": "public_reported_product_mz",
+  "product_half_window_da": 0.5,
+  "rawrr_tolerance_conversion": "0.5 / product_mz * 1e6 ppm",
+  "product_analyzer": "ITMS_low_resolution",
+  "fragmentation": "CID_35",
+  "baseline_quantile": 0.10,
+  "integration": "trapezoidal_positive_baseline_subtracted_area",
+  "biological_abundance_scale": "log2_positive_area",
+  "source_predata_rule": "MSV000101183_v1",
+  "pooled_qc_runs_used_for_resolution_check": 5,
+  "broad_window_biological_runs_opened_before_lock": 0,
+  "sample_level_outcome_rows_opened_before_lock": 0
+}

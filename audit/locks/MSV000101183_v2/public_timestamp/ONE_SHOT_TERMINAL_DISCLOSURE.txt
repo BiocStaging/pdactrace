@@ -1,0 +1,61 @@
+StageBridge MSV000101183 v2 one-shot terminal disclosure
+Disclosure version: 2
+Prepared UTC: 2026-07-18T01:15:30Z
+
+LOCK_ID:
+b33a8601325df8ebc35f7788778bf27eaff735abf00e34880c37fff926245bb4
+
+PRELABEL_ID:
+5aba19f56b1ff807acf2392a1ceafa7c6d185fec9f2a16255cfa1165b59acb56
+
+One-shot started UTC: 2026-07-18T01:14:39Z
+One-shot completed UTC: 2026-07-18T01:14:39Z
+Terminal decision: INCONCLUSIVE
+Reason: OUTCOME_SCHEMA_OR_COUNT_MISMATCH
+Statistical runner entered: FALSE
+Performance estimates produced: FALSE
+
+Expected biological counts:
+- Healthy: 20
+- IPMC: 4
+- PDAC: 16
+
+Observed mapped biological counts:
+- Healthy: 20
+- IPMC: 4
+- PDAC: 16
+
+Frozen-dictionary mapping issue:
+- pooled
+
+SHA-256 of results/decision.json:
+fa8b9d85f611bc4c21fdfadc44f132b621b24967b36e1c4b139aef27643aa79c
+
+SHA-256 of results/ONE_SHOT_STARTED.json:
+d4f17da0e0f01f1b12fee0e0a12f615097abf0340467b378dd27a28679d34f30
+
+SHA-256 of results/ONE_SHOT_COMPLETED.json:
+84676bc3b11288bef70f042dc4e5bfcc18c023e0e3b7bdc5cfe22083d79032f2
+
+SHA-256 of results/RESULT.md:
+356c668789af35193d29ae8f9bea4fd14e97d26c95ea67b9990e063560c4b2a5
+
+SHA-256 of prelabel_manifest_sha256.csv:
+9ea4ee88c3c9e72c90c95f3c1028538f98cfae464f91d492a5732a14ba9406b2
+
+SHA-256 of sealed metadata bytes:
+88294963f5cdcbaa6e5c9625956b0a270a95068434376ce665a9a6ecce0a45ae
+
+The 20/4/16 biological counts matched exactly, but at least one additional
+metadata row carried the normalized source term `pooled`, which was absent from
+the frozen outcome dictionary and outside the accepted 1.raw-40.raw biological
+mapping. The locked rule requires any unknown alias or extra structural row to
+produce terminal INCONCLUSIVE. The mapping was not expanded, the pooled rows
+were not silently discarded, and the statistical runner was not entered.
+
+This terminal decision will not be repaired, rerun, or replaced in this
+namespace. Any later use of the now-open outcome file is necessarily exploratory
+and cannot be represented as locked confirmation.
+
+This payload is submitted unchanged to independent RFC 3161 and OpenTimestamps
+services. Their response and proof artifacts are stored beside this file.

@@ -1,0 +1,28 @@
+{
+  "lock_name": "MSV000101183_v1",
+  "accession": "MSV000101183",
+  "frozen_at_utc": "2026-07-17 14:22:58 UTC",
+  "protocol_class": "prospectively locked reanalysis of a retrospective public cohort",
+  "source_pdac_lock_id": "fe595c20d577b0ddea62c1a622a3be65d110e319e89d21e79a72700855927b3a",
+  "sample_level_outcome_opened_before_lock": false,
+  "public_outcome_dictionary_known": true,
+  "public_aggregate_counts_known": true,
+  "expected_counts": {
+    "Healthy": 20,
+    "IPMC": 4,
+    "PDAC": 16
+  },
+  "expected_biological_samples": 40,
+  "expected_pooled_qc_files": 5,
+  "candidate_universe": 1356,
+  "prm_target_assays": 94,
+  "target_relation": "concordant",
+  "inverse_analysis_allowed": false,
+  "primary_endpoint": "PDAC_vs_Healthy",
+  "ipmc_required_for_pass": false,
+  "assay_eligibility": "finite in >=70% of biological samples and >=3/5 pooled QC files",
+  "bootstrap_replicates": 2000,
+  "bootstrap_seed": 20260717,
+  "published_validation_performance_used": false,
+  "source_target_sha256": "43f397cfa1d5873d4e7448460d716490dde3cbbee4c717679b19df60c8115e50"
+}

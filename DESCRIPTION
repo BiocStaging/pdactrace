@@ -1,6 +1,7 @@
 Package: pdactrace
 Type: Package
-Title: Stage-Aware PDAC Atlas and Tissue-to-Blood Biomarker Claim-Audit Framework
+Title: Stage-Aware PDAC Atlas and Prospectively Frozen Tissue-to-Serum
+    Biomarker Audit Framework
 Version: 0.99.20
 Authors@R: c(
     person(given = "Jibeom", family = "Ko",
@@ -8,21 +9,22 @@ Authors@R: c(
            role = c("aut", "cre"),
            comment = c(ORCID = "0009-0002-8630-1973")))
 Description: pdactrace implements a transparent, deterministic
-    claim-audit framework for stage-aware PDAC tissue-to-blood
-    biomarker evidence. It integrates per-stage trajectory matching
-    across bulk RNA-seq, tissue proteomics, single-cell origin, serum
-    proteomics, and pancreatitis context, with explicit
-    anchor-enrichment evaluation against a curated external reference
-    set. The framework comprises a 12-template competitive trajectory
-    catalog, a 3-axis + 2-gate reference score, an Evidence Math
-    layer, TRACE-D tissue-to-serum directional evidence concordance,
-    claim-tier classification, weight-robustness and Pareto support
-    audits, and an optional interpretable elastic-net prioritisation
-    layer trained only on user-supplied labels. The package ships a
-    queryable PDAC reference atlas as the demonstration cohort but is
-    methodology-first: no supervised classifier is trained or shipped,
-    because validated non-circular early-detection ground truth is
-    unavailable in PDAC and several adjacent cancers.
+    claim-audit framework for stage-aware pancreatic ductal
+    adenocarcinoma (PDAC) tissue-to-blood biomarker evidence. It
+    integrates per-stage trajectory matching across bulk RNA-seq,
+    tissue proteomics, single-cell origin, serum proteomics, and
+    pancreatitis context, with explicit anchor-enrichment evaluation
+    against a curated external reference set. The framework comprises
+    a 12-template competitive trajectory catalog, a 3-axis + 2-gate
+    reference score, an Evidence Math layer, TRACE-D tissue-to-serum
+    directional evidence concordance, claim-tier classification, and
+    weight-robustness and Pareto support audits. A prespecification
+    layer supports freezing candidate scores, directions and a
+    decision rule under a content hash before outcome labels are
+    opened, with a distinct inconclusive terminal state when a frozen
+    gate fails. Scope is deliberately PDAC-specific: no supervised
+    classifier is trained or shipped, because validated non-circular
+    early-detection ground truth is unavailable in PDAC.
 License: MIT + file LICENSE
 URL: https://github.com/jibeomko/pdactrace
 BugReports: https://github.com/jibeomko/pdactrace/issues
@@ -45,7 +47,9 @@ Imports:
     SummarizedExperiment
 Suggests:
     DESeq2,
+    digest,
     limma,
+    mixOmics,
     S4Vectors,
     BiocFileCache,
     glmnet,

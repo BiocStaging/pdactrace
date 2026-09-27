@@ -1,0 +1,70 @@
+StageBridge MSV000101183 prospective lock disclosure v1.1
+Disclosure version: 1.1
+Prepared UTC: 2026-07-18T00:23:13Z
+
+Repository accession: MSV000101183
+Lock namespace: MSV000101183_v1_1
+Analysis state: sample-level outcome unopened; validation RAW and abundance not downloaded
+Locked path count: 40
+
+LOCK_ID:
+710ad1251eb2cd7511bb53169430303f15ab3fd7208a32bc6448f18e5abc611d
+
+Unopened predecessor LOCK_ID:
+06392ef304074c3b83ea7ea93da5e0f28e016274e137af22f323757d98e82b4e
+
+SHA-256 of frozen/lock_manifest_sha256.csv:
+87beccc27f75c33d66f7ce0af9d845dccedd6ef306cc797fe449e07471c9790b
+
+SHA-256 of OUTCOME_DICTIONARY.tsv:
+0224eaa95cea73c52fad1d7ac4639a543c9bf8cc2e469105417864e241f64ffa
+
+SHA-256 of AGGREGATE_CONDITION_TABLE.tsv:
+3df2d847dc9325386fa3234b5754904fe9bd3f6b1ef8e8527470b0ecfcb37bdd
+
+SHA-256 of DECISION_RULE.json:
+a56abf3fa4e2f897017d573e9ed222d41580ca5b66be5491cf5a630ed1d81a1b
+
+SHA-256 of TECHNICAL_QC_RULE.json:
+10b006d2b98fdb7a3e005a794bfaf69658220e3fc4afb2128e1402e61dfc7e08
+
+SHA-256 of frozen/prm_target_assays_exact.csv:
+17283777938638220773387b6ea278eba957c5bf9c47ae514443c86cfe44202a
+
+SHA-256 of frozen/execution_environment.json:
+8ce8726154754d6f6a18cd6314a0b08880a4284414d4b0eb010ac3b6fa3812c5
+
+SHA-256 of frozen/prelock_test_report.json:
+7956010cf60fc5ad4c28ab4a138bf2457dd3203acaf50adeba7e0d5c92cedbda
+
+SHA-256 of frozen/assay_dictionary_panel_coverage.csv:
+d6ff1ae8c947f72f3e94c9f72214a34917508dcc1ab58b202b56ca010dd4cc66
+
+The public pre-lock aggregate condition table is Healthy n=20, IPMC n=4,
+and PDAC n=16. The primary endpoint is PDAC versus Healthy. IPMC is not
+required for PASS because its public aggregate size is four.
+
+The source-study transition dictionary contains 94 annotations. Ninety-three
+map to unique theoretical precursor and product ions; TGOLN2 is excluded before
+validation access because its reported precursor is inconsistent with its
+peptide. Precursor matching and product extraction are fixed at 20 ppm. The
+public assay dictionary contains zero proteins from the absolute StageBridge
+top-10, so this is a panel-conditional transport audit rather than validation of
+the original absolute top-10 signature.
+
+The LOCK_ID is the SHA-256 commitment computed from the ordered path, byte
+count and SHA-256 rows in frozen/lock_manifest_sha256.csv. The manifest binds
+the discovery scores and directions, exact-mass assay dictionary, outcome
+dictionary, aggregate count gate, biological decision rule, label-blind
+technical-QC rule, pinned execution environment, tests, downloader, extractor,
+prelabel freezer and one-shot runner.
+
+At disclosure preparation, both MSV000101183 lock namespaces had no abundance,
+sealed metadata, sample-level condition row or terminal decision. No
+MSV000101183 validation RAW file or quantitative spectrum had been downloaded
+or opened. Public article-level outcome definitions, aggregate counts and
+reported source-study performance were known; reported performance is not an
+input to the StageBridge decision rule.
+
+This payload is submitted unchanged to independent RFC 3161 and OpenTimestamps
+services. Their response and proof artifacts are stored beside this file.

@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "expected_biological_runs": 40,
+  "expected_pooled_qc_runs": 5,
+  "minimum_consistently_mapped_assays": 20,
+  "consistent_mapping_fraction": 0.90,
+  "minimum_assay_eligible_targets": 15,
+  "minimum_mapped_assays_per_run": 20,
+  "minimum_detected_assays_per_run": 15,
+  "maximum_median_pooled_qc_cv": 0.30,
+  "minimum_fraction_eligible_qc_cv_le_0_30": 0.80,
+  "technical_failure_status": "INCONCLUSIVE_TECHNICAL_QC",
+  "outcome_access_allowed_after_failure": false
+}

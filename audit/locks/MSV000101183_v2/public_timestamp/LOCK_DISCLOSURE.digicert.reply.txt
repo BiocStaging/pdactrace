@@ -1,0 +1,19 @@
+Status info:
+Status: Granted.
+Status description: unspecified
+Failure info: unspecified
+
+TST info:
+Version: 1
+Policy OID: 2.16.840.1.114412.7.1
+Hash Algorithm: sha256
+Message data:
+    0000 - 03 5a f9 ba 31 95 90 0a-28 8e 59 b5 93 60 10 c3   .Z..1...(.Y..`..
+    0010 - fb ba fc 13 52 74 09 28-af c8 a1 db f4 a9 94 f5   ....Rt.(........
+Serial number: 0x8028C682344A1CC42277D18DD63EAF1C
+Time stamp: Jul 18 01:08:31 2026 GMT
+Accuracy: unspecified
+Ordering: no
+Nonce: 0x8768CC516D49EED1
+TSA: unspecified
+Extensions:

@@ -1,0 +1,33 @@
+{
+  "accession": "PXD067770",
+  "lock_id": "fe595c20d577b0ddea62c1a622a3be65d110e319e89d21e79a72700855927b3a",
+  "status": "INCONCLUSIVE",
+  "decision_origin": "terminal_one_shot_technical_adjudication",
+  "adjudicated_utc": "2026-07-17T12:31:33Z",
+  "outcome_access_attempted": true,
+  "statistical_runner_executed": false,
+  "performance_metrics_available": false,
+  "reason_code": "TIMESTAMPED_GROUP_MAPPING_MISMATCH",
+  "reason": "The source disease labels mapped to the three allowed conditions, but the resulting counts did not equal the externally timestamped 12/36/12 expectation. The locked endpoints therefore could not be instantiated without changing the mapping or accessing additional outcome information.",
+  "protocol_basis": "Insufficient evaluable group information is INCONCLUSIVE under the locked protocol.",
+  "criteria": {
+    "evaluable_group_counts_available": false,
+    "enough_groups": false,
+    "enough_positive_features": null,
+    "enough_panel_features": null,
+    "feature_margin": null,
+    "pooled_patient_lower_ci_above_half": null,
+    "ipmn_patient_lower_ci_above_half": null
+  },
+  "group_counts": null,
+  "feature_metrics": null,
+  "patient_metrics": null,
+  "no_rerun": true,
+  "no_rescue_analysis_in_locked_result": true,
+  "started_record_sha256": "738320222c41ea9e54fe6575274f4633731b543dd2a66ba7c6d65e787f08c56a",
+  "technical_failure_record_sha256": "0fe30dfee12ee0d950381c97566eff0242fec2edad6025c094121332d7aac6be",
+  "sealed_sdrf_sha256": "c8ed37299d4a687907b44fa717cbb0fd31c0a483d317c89e0c5ac2008aa5352d",
+  "abundance_sha256": "a9b97587768026502464147acf9a13194dc1abedcb9930f24801d8bf6db8b433",
+  "panel_sha256": "b1c7f4c2490ed1cfa87869001698a1686157120b5321f91c94900b95e7d2b5c2",
+  "interpretation_ceiling": "No claim about StageBridge transport performance can be made from this locked run. A new validation attempt would require a new public lock and a separately versioned analysis."
+}

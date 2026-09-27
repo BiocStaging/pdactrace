@@ -1,0 +1,46 @@
+StageBridge MSV000101183 prospective lock disclosure
+Disclosure version: 1
+Prepared UTC: 2026-07-17T14:24:03Z
+
+Repository accession: MSV000101183
+Lock namespace: MSV000101183_v1
+Analysis state: sample-level outcome unopened; validation abundance not downloaded
+Locked path count: 33
+
+LOCK_ID:
+06392ef304074c3b83ea7ea93da5e0f28e016274e137af22f323757d98e82b4e
+
+SHA-256 of frozen/lock_manifest_sha256.csv:
+065cf9cb4c42ab99c9e0cdbbb202610f0ff9d36c93214df669bd4b1b57ec3ec0
+
+SHA-256 of OUTCOME_DICTIONARY.tsv:
+0224eaa95cea73c52fad1d7ac4639a543c9bf8cc2e469105417864e241f64ffa
+
+SHA-256 of AGGREGATE_CONDITION_TABLE.tsv:
+3df2d847dc9325386fa3234b5754904fe9bd3f6b1ef8e8527470b0ecfcb37bdd
+
+SHA-256 of DECISION_RULE.json:
+a56abf3fa4e2f897017d573e9ed222d41580ca5b66be5491cf5a630ed1d81a1b
+
+SHA-256 of frozen/prm_target_assays.csv:
+41e4d37b1bf8bbf190ec9d032fadd5db04e10347a2960d46db279140409d9c23
+
+The public pre-lock aggregate condition table is Healthy n=20, IPMC n=4,
+and PDAC n=16. The primary endpoint is PDAC versus Healthy. IPMC is not
+required for PASS because its public aggregate size is four.
+
+The LOCK_ID is the SHA-256 commitment computed from the ordered path, byte
+count and SHA-256 rows in frozen/lock_manifest_sha256.csv. The manifest binds
+the discovery scores and directions, public PRM assay dictionary, outcome
+dictionary, aggregate condition table, exact decision rule, protocol, package
+code, label-blind downloader/extractor, prelabel freezer and one-shot runner.
+
+At disclosure preparation, this lock's inbox and results directories were
+empty, and preprocessing/sealed_metadata/meta.csv did not exist. No sample-level
+condition row or validation-cohort quantitative spectrum had been downloaded or
+opened. Public article-level outcome definitions, aggregate counts and reported
+source-study performance were known; reported performance is explicitly not an
+input to the StageBridge decision rule.
+
+This payload is submitted unchanged to independent RFC 3161 and OpenTimestamps
+services. Their response and proof artifacts are stored beside this file.

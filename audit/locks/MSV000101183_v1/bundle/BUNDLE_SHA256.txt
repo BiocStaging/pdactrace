@@ -1,0 +1,9 @@
+Archive: MSV000101183_v1_lock_bundle.tar.gz
+Files: 42
+SHA-256: 0689f6a8f6615ec849cb58deca86f4dd01628282d51dc614edb1fba47b0b0efe
+LOCK_ID: 06392ef304074c3b83ea7ea93da5e0f28e016274e137af22f323757d98e82b4e
+
+The archive itself is an operational bundle and is not a row in the frozen
+lock manifest. Its locked contents verify individually against
+frozen/lock_manifest_sha256.csv; timestamp artifacts verify the unchanged
+LOCK_DISCLOSURE.txt payload.

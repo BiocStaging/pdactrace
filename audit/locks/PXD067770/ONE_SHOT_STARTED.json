@@ -1,0 +1,8 @@
+{
+  "accession": "PXD067770",
+  "event": "one-shot outcome access started",
+  "lock_id": "fe595c20d577b0ddea62c1a622a3be65d110e319e89d21e79a72700855927b3a",
+  "prelabel_manifest_sha256": "df860ffc41ed8ced20fef3914cce9f01b67a7cfca19c2b083c4e16b1cf8e9021",
+  "sealed_sdrf_sha256": "c8ed37299d4a687907b44fa717cbb0fd31c0a483d317c89e0c5ac2008aa5352d",
+  "started_utc": "2026-07-17T12:30:08Z"
+}

@@ -1,0 +1,70 @@
+StageBridge MSV000101183 outcome-blind technical amendment disclosure v2
+Disclosure version: 2
+Prepared UTC: 2026-07-18T01:07:34Z
+
+Repository accession: MSV000101183
+Lock namespace: MSV000101183_v2
+Protocol class: outcome-blind technical amendment after label-blind RAW/QC inspection
+Broad-window biological abundance extracted: FALSE
+Sample-level outcome rows opened: FALSE
+Locked path count: 53
+
+LOCK_ID:
+b33a8601325df8ebc35f7788778bf27eaff735abf00e34880c37fff926245bb4
+
+Terminal v1.1 LOCK_ID:
+710ad1251eb2cd7511bb53169430303f15ab3fd7208a32bc6448f18e5abc611d
+
+SHA-256 of frozen/lock_manifest_sha256.csv:
+a052454a5e97a54be194c115b6084c6487e7151a83eca8e8645f238203a747f0
+
+SHA-256 of AMENDMENT.md:
+e95c9c7b3253e3b6095cec15708956cc1aca4cbf883bd9e34c80cb900658665c
+
+SHA-256 of PRODUCT_WINDOW_RULE.json:
+f6e19c50b9718f265f0521c7d7dd3a1f4023d802d8b609182f7d641b19b254af
+
+SHA-256 of DECISION_RULE.json:
+a56abf3fa4e2f897017d573e9ed222d41580ca5b66be5491cf5a630ed1d81a1b
+
+SHA-256 of TECHNICAL_QC_RULE.json:
+10b006d2b98fdb7a3e005a794bfaf69658220e3fc4afb2128e1402e61dfc7e08
+
+SHA-256 of frozen/acquired_target_assays.csv:
+dc2b08d057864bf2ca7852b64a688006cf5188d85c0fe8df4d6e615e4330e959
+
+SHA-256 of frozen/scan_analyzer_audit.csv:
+3f671ee2f967ee02e93116fec44c0c82a807d90f422c1a4d3ce12e33528a69e1
+
+SHA-256 of frozen/pooled_qc_product_window_validation.csv:
+a79b389ebb15377448628e2e6946710a51e5f2bc87bdc9c721c71a0f16becb25
+
+SHA-256 of frozen/execution_environment.json:
+472a7c7c831d55d445ed514808d957d210d068d90a94d9ac16f2b2e0b56771c9
+
+SHA-256 of frozen/prelock_test_report.json:
+fb750933195f832d43a1a9297ed378a3e73bd00706b65e6257d11b054d63d5b4
+
+Version 1.1 ended before outcomes as INCONCLUSIVE_TECHNICAL_QC and remains
+terminal. Its 20-ppm product-ion rule was incompatible with the observed
+low-resolution ITMS/CID35 product scans. Version 2 restores the 0.5-Da product
+half-window already frozen in the pre-data v1 protocol while retaining exact
+20-ppm precursor matching.
+
+The five label-blind pooled-QC runs were used before this lock solely to verify
+the instrument-resolution amendment. All 20 acquired targets were detected in
+5/5 pooled runs; median CV was 0.1208 and 19/20 targets had CV at most 0.30.
+Broad-window biological abundance was not extracted before this disclosure.
+
+The outcome dictionary, aggregate 20/4/16 count gate, StageBridge scores,
+comparators, direct orientation, endpoints and PASS/FAIL criteria are
+byte-identical to v1.1. The metadata remains sealed with SHA-256
+88294963f5cdcbaa6e5c9625956b0a270a95068434376ce665a9a6ecce0a45ae.
+
+The acquired 20-target panel contains none of the absolute StageBridge top-20.
+Any result is panel-conditional and cannot be represented as validation of the
+original absolute signature. Version 2 is outcome-blind but technically
+data-informed and must be reported with that qualification.
+
+This payload is submitted unchanged to independent RFC 3161 and OpenTimestamps
+services. Their response and proof artifacts are stored beside this file.

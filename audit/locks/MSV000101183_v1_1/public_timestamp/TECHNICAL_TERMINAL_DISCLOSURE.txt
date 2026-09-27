@@ -1,0 +1,63 @@
+StageBridge MSV000101183 v1.1 label-blind technical terminal disclosure
+Disclosure version: 1
+Prepared UTC: 2026-07-18T00:45:07Z
+
+LOCK_ID:
+710ad1251eb2cd7511bb53169430303f15ab3fd7208a32bc6448f18e5abc611d
+
+Decision: INCONCLUSIVE_TECHNICAL_QC
+Reason: PREDECLARED_LABEL_BLIND_TECHNICAL_QC_FAILED
+Sample-level outcome rows opened: FALSE
+Metadata remains sealed: TRUE
+Prelabel freeze created: FALSE
+One-shot runner entered: FALSE
+
+Observed label-blind technical metrics:
+- Biological runs: 40
+- Pooled-QC runs: 5
+- Consistently mapped assays: 20
+- Assay-eligible targets: 11 (required 15)
+- Minimum mapped assays per run: 20 (required 20)
+- Minimum detected assays per run: 9 (required 15)
+- Median pooled-QC CV: 1.0059 (required <=0.30)
+- Eligible-assay fraction with pooled-QC CV <=0.30: 0 (required >=0.80)
+
+SHA-256 of results/LABEL_BLIND_TECHNICAL_TERMINAL.json:
+6f45035618fb1f7fec9276317ae4afd5112cd8a573a9bc78936c5a61ede7c6a4
+
+SHA-256 of preprocessing/work/technical_qc_decision.json:
+2d36dfd8911dedc3e23d00bde5f44aca876af7c163337b7c05f55d070d0f75b0
+
+SHA-256 of inbox/abundance.csv:
+3d40dbcd7305a705c8230e164a58ee48f205bac1cdfa75989211b369b13e69ba
+
+SHA-256 of preprocessing/work/assay_eligibility.csv:
+8cf7cb9dde07d809bf0e8874b5102d5636a627428928496a08c8c51749f1eeef
+
+SHA-256 of preprocessing/work/run_technical_qc.csv:
+3eba13c4f3d2a812fd4b3d5b0294973dfe34fe714c074849bbd6022ab02aca6a
+
+SHA-256 of preprocessing/work/blinded_extraction_record.json:
+f10ec65176deda8218bec6dc65d7cfc0faad200f149f6972806f266b6e0b49fc
+
+SHA-256 of preprocessing/work/blinded_peak_area_long.csv:
+6811b76ada4596d36ac8fd236197cd022fb997b08125c68ba657c8ceff93be5a
+
+SHA-256 of preprocessing/work/raw_download_manifest.csv:
+873adb0bb11d8edf8c7a1591b21b5535b69efc6b031e7830b313ddf22ddd7e5c
+
+SHA-256 of preprocessing/work/sealed_metadata_record.json:
+a2d1ee07adb42c9a81dde35be51f7aec57210ff54c6f91c4c01ab5e8bc1369ba
+
+SHA-256 of sealed metadata bytes:
+88294963f5cdcbaa6e5c9625956b0a270a95068434376ce665a9a6ecce0a45ae
+
+This v1.1 lock is terminal before outcome access. Its technical criteria will
+not be weakened and its outcome file will not be opened. Post-terminal
+inspection of outcome-blind scan metadata identified low-resolution ITMS/CID
+product spectra, explaining why the locked 20-ppm product window was
+inappropriate. Any follow-up must use a separately named, explicitly
+outcome-blind technical amendment and may not reinterpret this terminal record.
+
+This payload is submitted unchanged to independent RFC 3161 and OpenTimestamps
+services. Their response and proof artifacts are stored beside this file.

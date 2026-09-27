@@ -31,3 +31,5 @@
 ^CLAUDE\.md$
 ^BIOCONDUCTOR\.md$
 ^\.claude$
+^audit$
+^audit/

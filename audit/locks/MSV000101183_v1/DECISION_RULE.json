@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "accession": "MSV000101183",
+  "primary_endpoint": "PDAC_vs_Healthy",
+  "secondary_endpoint": "Invasive_vs_Healthy",
+  "descriptive_endpoint": "IPMC_vs_Healthy",
+  "expected_counts": {
+    "Healthy": 20,
+    "IPMC": 4,
+    "PDAC": 16
+  },
+  "assay_completeness_fraction": 0.70,
+  "minimum_pooled_qc_detections": 3,
+  "feature_fdr_threshold": 0.10,
+  "minimum_common_positive_features": 5,
+  "primary_panel_size": 10,
+  "minimum_primary_panel_features": 5,
+  "feature_average_precision_margin": 0.05,
+  "bootstrap_replicates": 2000,
+  "bootstrap_seed": 20260717,
+  "primary_patient_auroc_lower_bound_threshold": 0.50,
+  "require_exact_aggregate_match": true,
+  "require_direct_concordant_orientation": true,
+  "ipmc_required_for_pass": false,
+  "published_validation_performance_used": false
+}

@@ -1,0 +1,4 @@
+canonical_condition	expected_n	primary_endpoint_included	primary_endpoint_role	pooled_secondary_role	count_source	source_locator	repository_total_crosscheck
+Healthy	20	TRUE	reference	reference	https://doi.org/10.1002/cam4.71941	Table 1 validation cohort	MSV000101183 reports 40 serum samples
+IPMC	4	FALSE	excluded	case	https://doi.org/10.1002/cam4.71941	Table 1 validation cohort	MSV000101183 reports 40 serum samples
+PDAC	16	TRUE	case	case	https://doi.org/10.1002/cam4.71941	Table 1 validation cohort	MSV000101183 reports 40 serum samples

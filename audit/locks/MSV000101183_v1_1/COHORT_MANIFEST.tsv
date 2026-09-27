@@ -1,0 +1,22 @@
+field	value	public_source
+lock_name	MSV000101183_v1_1	local protocol namespace
+accession	MSV000101183	https://massive.ucsd.edu/ProteoSAFe/dataset.jsp?accession=MSV000101183
+repository	MassIVE	https://massive.ucsd.edu/
+public_status	Public	https://massive.ucsd.edu/ProteoSAFe/dataset.jsp?accession=MSV000101183
+dataset_doi	10.25345/C5ST7F99B	https://doi.org/10.25345/C5ST7F99B
+article_doi	10.1002/cam4.71941	https://doi.org/10.1002/cam4.71941
+specimen	human serum	https://massive.ucsd.edu/ProteoSAFe/dataset.jsp?accession=MSV000101183
+acquisition	parallel reaction monitoring LC-MS/MS	https://massive.ucsd.edu/ProteoSAFe/dataset.jsp?accession=MSV000101183
+expected_biological_samples	40	https://doi.org/10.1002/cam4.71941
+expected_numbered_raw_files	40	MassIVE public file inventory
+expected_pooled_qc_raw_files	5	MassIVE public file inventory
+expected_total_repository_files	93	MassIVE public summary
+metadata_header	No.|Raw files|Groups	MassIVE metadata/meta.csv header only
+prior_stagebridge_use	FALSE	StageBridge source and result audit
+sample_level_outcome_opened_before_lock	FALSE	pre-lock access audit
+validation_performance_used_for_rule	FALSE	DECISION_RULE.json
+source_article_validation_targets	25	https://doi.org/10.1002/cam4.71941 Section 3.6
+source_dictionary_assays	94	PXD067770 public PRM_targets.csv
+exact_mass_assays_before_validation_access	93	chemistry self-test; TGOLN2 excluded
+precursor_and_product_tolerance_ppm	20	LOCKED_PROTOCOL.md
+technical_qc_required_before_outcome	TRUE	TECHNICAL_QC_RULE.json
