@@ -52,6 +52,33 @@ tag and are out of scope here.
   than `set.seed()`, matching the existing BiocCheck-compliant pattern.
 - `stats::reshape()` is called with its namespace qualified.
 
+## Bug fixes
+
+- `report_gene()` failed for every gene with "'pdactrace_reference' is
+  not an exported object". Its report templates read the atlas as
+  `pdactrace::pdactrace_reference`, which stopped resolving when 0.99.20
+  set `LazyData: false`; the `\donttest{}` example hid it from
+  `R CMD check`. The templates now load the atlas with `data()`.
+- `citation("pdactrace")` and the README cited Zenodo DOI
+  10.5281/zenodo.20076698, which is the v0.99.0 record under an older
+  title. Both now use the concept DOI 10.5281/zenodo.20068234, which
+  resolves to the latest archived version, and the current title.
+- The `\donttest{}` examples of `fit_stage_de()`, `fit_stage_de_protein()`,
+  `classify_trajectory()` and `classify_protein_trajectory()` referenced
+  undefined placeholder objects (`my_counts`, `my_intensity`) and failed
+  under `--run-donttest`. They now run on the bundled toy data.
+- `download_phase_csvs()` could not work for anyone: it fetched from a
+  private repository, at a path that repository does not contain, while
+  its documentation called the source public. The two upstream fits
+  (phase33 RNA, phase34 protein; gene-level summary statistics) now live
+  in `data-raw/` of this repository, the helper fetches them from there,
+  and `data-raw/build_reference.R` and `build_protein_betas.R` read them
+  in place. A clean checkout with no other repository reproduces the 64
+  base columns of `pdactrace_reference` exactly.
+- The reproducibility vignette no longer tells users to clone the private
+  manuscript repository or cite Zenodo record 10.5281/zenodo.20067849 as
+  its archive; that record is the pdactrace v0.99.0 source.
+
 ## Tests
 
 - Added `test-sb-core.R` and `test-sb-one-shot.R`. The one-shot suite is

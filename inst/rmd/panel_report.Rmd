@@ -87,7 +87,8 @@ when picking a non-redundant panel.
 # Panel-level evidence radar
 
 ```{r panel-hex, fig.width=5.4, fig.height=4.2}
-in_atlas_genes <- genes[genes %in% pdactrace::pdactrace_reference$gene_symbol]
+utils::data("pdactrace_reference", package = "pdactrace", envir = environment())
+in_atlas_genes <- genes[genes %in% pdactrace_reference$gene_symbol]
 hex <- if (length(in_atlas_genes) > 0L) {
   tryCatch(pdactrace::plot_gene_hexagon(in_atlas_genes),
            error = function(e) NULL)
@@ -101,7 +102,7 @@ if (!is.null(hex)) print(hex) else
 ```{r per-gene, results="asis"}
 for (g in genes) {
   cat(sprintf('\n<div class="gene-card">\n<h2>%s</h2>\n', g))
-  if (!g %in% pdactrace::pdactrace_reference$gene_symbol) {
+  if (!g %in% pdactrace_reference$gene_symbol) {
     cat(sprintf('<p class="muted">%s is not in the bundled atlas.</p>\n',
                 g))
     cat('</div>\n')

@@ -26,9 +26,8 @@ external data needed" to "the entire FASTQ-to-atlas pipeline":
    intensity matrix through the same audit framework via
    `project_user_cohort()`.
 3. **Layer 3 — bundled phase chain.** Re-derive the bundled atlas
-   from the package's own `inst/extdata` plus the two large
-   upstream phase CSVs (downloaded once via
-   `download_phase_csvs()`).
+   from a git checkout of the source repository, which carries
+   every processed input the build reads.
 4. **Layer 4 — full pipeline (FASTQ → counts → fits).**
    Out of scope for the package; this layer is the
    manuscript-monorepo's job. Pointer at the bottom.
@@ -87,76 +86,46 @@ stage / cohort columns (`fit_stage_de(se, stage_col, cohort_col)`).
 
 # Layer 3 — Re-derive the bundled atlas
 
-The full `data-raw/build_reference.R` chain reproduces
-`data/pdactrace_reference.rda` from public phase CSVs. The package
-already ships the **six small downstream tables** in
-`inst/extdata/phase{2c,29,42,60,77,80}_*.csv.xz` (~52 KB
-compressed total). The two large upstream fits — `phase33` (RNA)
-and `phase34` (protein) — are too big to bundle and are pulled
-once via `download_phase_csvs()`:
+`data-raw/build_reference.R` rebuilds the atlas from processed,
+gene-level inputs. Seven of them are bundled in the package as
+`inst/extdata/*.csv.xz` (`multi_cohort_consistency` plus the six
+downstream tables `phase{2c,29,42,60,77,80}`). The two larger upstream
+fits — `phase33` (RNA) and `phase34` (protein), ~3.5 MB together — are
+kept out of the package tarball and live in `data-raw/` of the source
+repository. `data-raw/` is not installed with the package, so the
+rebuild runs from a git checkout:
 
 ```{r layer3, eval = FALSE}
-# 1. Pull the two large upstream CSVs (~3.5 MB total) into the user's
-#    BiocFileCache. Subsequent calls reuse the cached copy.
-paths <- download_phase_csvs("both")
-paths
-#> phase33  /home/.../BiocFileCache/.../phase33_deseq2_coef_12template.csv
-#> phase34  /home/.../BiocFileCache/.../phase34_protein_pooled_12template.csv
-
-# 2. The build_reference.R script's lookup chain
-#    (inst/extdata -> $PDAC_BASE_DIR -> error) finds phase33/34 once
-#    PDAC_BASE_DIR points to a local copy.  Easiest setup: clone the
-#    manuscript-monorepo and point PDAC_BASE_DIR at it:
-#       git clone https://github.com/jibeomko/PDAC_biomarker
-#       export PDAC_BASE_DIR=$PWD/PDAC_biomarker
-#       Rscript data-raw/build_reference.R
+# From a shell:
+#   git clone https://github.com/jibeomko/pdactrace
+#   cd pdactrace
+#   Rscript data-raw/build_reference.R
 ```
 
-The build re-creates `data/pdactrace_reference.rda` byte-identical
-to the bundled object, given the same upstream CSVs and the same
-R / data.table versions.
+Each input is looked up in `inst/extdata/` and then in `data-raw/`, so
+no environment variable or second repository is needed. Run this way,
+`build_reference.R` reproduces the 64 base columns of the bundled
+`pdactrace_reference` exactly, for the same 10,113 genes in the same
+order. The derived audit, Pareto and TRACE-D columns are added by the
+`data-raw/attach_*.R` scripts.
 
-The `build_meta_analysis.R`, `build_atlas_metadata.R`,
-`build_audit_scores_v2.R`, etc. scripts under `data-raw/` extend
-the same chain — all are deterministic given the bundled inputs +
-the two cached CSVs.
+If you only want the two upstream fits, without cloning,
+`download_phase_csvs()` fetches them into your `BiocFileCache`:
 
-For a one-off "fresh" rebuild without cloning the manuscript repo,
-the snippet below works as long as both phase CSVs are reachable
-on the local filesystem (regardless of where `PDAC_BASE_DIR`
-points):
-
-```{r layer3-direct, eval = FALSE}
-# Manual rebuild path — pure R, no shell needed
+```{r layer3-download, eval = FALSE}
 paths <- download_phase_csvs("both")
-target_dir <- file.path(
-  Sys.getenv("PDAC_BASE_DIR", tempdir()),
-  "analysis/manuscript/tissue_to_serum_biomarker/results")
-dir.create(target_dir, recursive = TRUE, showWarnings = FALSE)
-file.copy(paths, target_dir, overwrite = TRUE)
-
-# Now `read_phase()` inside build_reference.R will resolve via the
-# $PDAC_BASE_DIR fallback even if PDAC_BASE_DIR was just a tempdir.
-Sys.setenv(PDAC_BASE_DIR = dirname(dirname(dirname(target_dir))))
-source(system.file("..", "data-raw", "build_reference.R",
-                    package = "pdactrace"))
+p33 <- data.table::fread(paths[["phase33"]])
 ```
 
 # Layer 4 — From FASTQ
 
 This layer — raw FASTQ → STAR/salmon counts → DESeq2 LRT → phase33
-CSV — is **out of scope for `pdactrace`**. The required cohort-
-specific Snakemake / Nextflow pipelines, ~110 numbered
-`phase*` scripts, FragPipe configs, scVI / liana notebooks, and
-~100 GB of intermediate artefacts live in the companion
-manuscript-monorepo:
-
-* GitHub: <https://github.com/jibeomko/PDAC_biomarker>
-* Zenodo: [10.5281/zenodo.20067849](https://doi.org/10.5281/zenodo.20067849)
-
-That repository carries the public-data accession manifests under
-`analysis/metadata/`; `list_data_sources()` exposes the same
-information programmatically inside `pdactrace`.
+CSV — is **out of scope for `pdactrace`**. The cohort-specific
+pipelines, ~110 numbered `phase*` scripts, FragPipe configs, scVI /
+liana notebooks and ~100 GB of intermediate artefacts live in a
+separate manuscript working repository that is not public. Every input
+dataset is public, and `list_data_sources()` lists the accessions so
+the raw data can be retrieved independently.
 
 # Provenance summary
 

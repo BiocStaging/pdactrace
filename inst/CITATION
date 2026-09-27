@@ -2,8 +2,8 @@ citHeader("To cite pdactrace in publications, use:")
 
 bibentry(
   bibtype  = "Manual",
-  title    = paste0("pdactrace: Stage-Aware PDAC Atlas and",
-                    " Tissue-to-Blood Biomarker Claim-Audit Framework"),
+  title    = paste0("pdactrace: Stage-Aware PDAC Atlas and Prospectively",
+                    " Frozen Tissue-to-Serum Biomarker Audit Framework"),
   author   = person(given = "Jibeom", family = "Ko",
                     email = "rhwlqja1779@gmail.com",
                     comment = c(ORCID = "0009-0002-8630-1973")),
@@ -14,6 +14,6 @@ bibentry(
                     } else {
                       "0.99.20"
                     }),
-  doi      = "10.5281/zenodo.20076698",
-  url      = "https://doi.org/10.5281/zenodo.20076698"
+  doi      = "10.5281/zenodo.20068234",
+  url      = "https://doi.org/10.5281/zenodo.20068234"
 )

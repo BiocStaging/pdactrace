@@ -49,17 +49,17 @@
 #' }
 #'
 #' \donttest{
-#'   # Matrix interface:
-#'   prot_fit <- fit_stage_de_protein(my_intensity, my_stage, my_cohort)
-#'
-#'   # SummarizedExperiment interface:
+#' # SummarizedExperiment interface:
+#' if (requireNamespace("limma", quietly = TRUE)) {
 #'   library(SummarizedExperiment)
 #'   se <- SummarizedExperiment(
-#'     assays = list(intensity = my_intensity),
-#'     colData = DataFrame(stage = my_stage, cohort = my_cohort))
+#'     assays = list(intensity = toy_protein),
+#'     colData = DataFrame(stage = toy_coldata$stage,
+#'                         cohort = toy_coldata$cohort))
 #'   prot_fit <- fit_stage_de_protein(
 #'     se, stage_col = "stage", cohort_col = "cohort",
 #'     assay_name = "intensity")
+#' }
 #' }
 #' @importClassesFrom SummarizedExperiment SummarizedExperiment
 #' @export

@@ -45,7 +45,12 @@ prot_fit <- data.table::data.table(
 classify_protein_trajectory(prot_fit, sig_only = FALSE)
 
 \donttest{
-  prot_fit <- fit_stage_de_protein(my_intensity, my_stage, my_cohort)
+if (requireNamespace("limma", quietly = TRUE)) {
+  data(toy_protein)
+  data(toy_coldata)
+  prot_fit <- fit_stage_de_protein(toy_protein, toy_coldata$stage,
+                                   toy_coldata$cohort)
   prot_pat <- classify_protein_trajectory(prot_fit)
+}
 }
 }

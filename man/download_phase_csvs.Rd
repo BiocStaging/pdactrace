@@ -16,7 +16,7 @@ download_phase_csvs(
 or \code{"both"} (default).  Selects which CSV(s) to fetch.}
 
 \item{ref}{Git ref (branch / tag / commit) on
-\code{jibeomko/PDAC_biomarker} to pull from.  Default \code{"main"}.}
+\code{jibeomko/pdactrace} to pull from.  Default \code{"main"}.}
 
 \item{cache}{A \link[BiocFileCache:BiocFileCache-class]{BiocFileCache::BiocFileCache} object.  Default
 uses the user's standard cache.}
@@ -32,20 +32,17 @@ Invisibly, a named character vector mapping the requested
 The bundled \code{inst/extdata} carries the six small downstream phase
 tables (phase2c / phase29 / phase42 / phase60 / phase77 / phase80)
 but \strong{not} the two large upstream fits — \code{phase33_deseq2_coef_12template.csv}
-(~2.6 MB raw RNA fit) and \code{phase34_protein_pooled_12template.csv}
-(~880 KB protein fit) — because together they push the tarball
-past Bioconductor's 5 MB ceiling. This helper fetches them on
-demand from the public companion manuscript-monorepo at
-\code{github.com/jibeomko/PDAC_biomarker} (Zenodo archive
-\href{https://doi.org/10.5281/zenodo.20067849}{10.5281/zenodo.20067849})
-via raw GitHub URLs and caches them locally with \code{\link[BiocFileCache:BiocFileCache-class]{BiocFileCache::BiocFileCache()}}.
+(~2.6 MB RNA fit) and \code{phase34_protein_pooled_12template.csv}
+(~0.9 MB protein fit) — to keep the software tarball small. Both
+are gene-level summary statistics and live in \verb{data-raw/} of the
+public source repository, \code{github.com/jibeomko/pdactrace}. This
+helper fetches them on demand via raw GitHub URLs and caches them
+locally with \code{\link[BiocFileCache:BiocFileCache-class]{BiocFileCache::BiocFileCache()}}.
 }
 \details{
-Once the CSVs are in the cache, \code{data-raw/build_reference.R} and
-\code{data-raw/build_protein_betas.R} pick them up via their
-\verb{$PDAC_BASE_DIR/...} fallback (the cache directory just needs to
-have a \verb{phase33_*} and \verb{phase34_*} file at predictable paths, or
-callers can pass the cached paths to \code{read_phase()} directly).
+A git checkout does not need this helper: \code{data-raw/build_reference.R}
+and \code{data-raw/build_protein_betas.R} read both files from \verb{data-raw/}
+directly.
 }
 \examples{
 args(download_phase_csvs)

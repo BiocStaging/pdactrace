@@ -34,14 +34,16 @@ PKG  <- rprojroot::find_package_root_file()
   bundled <- file.path(PKG, "inst", "extdata",
                         paste0(stem, ".csv.xz"))
   if (file.exists(bundled)) return(bundled)
+  in_repo <- file.path(PKG, "data-raw", paste0(stem, ".csv"))
+  if (file.exists(in_repo)) return(in_repo)
   ext_xz <- file.path(TS, paste0(stem, ".csv.xz"))
   if (file.exists(ext_xz)) return(ext_xz)
   ext_csv <- file.path(TS, paste0(stem, ".csv"))
   if (file.exists(ext_csv)) return(ext_csv)
   stop("Cannot find ", stem,
        ".csv(.xz). Either run data-raw/bundle_phase_csvs.R against ",
-       "a manuscript-monorepo at PDAC_BASE_DIR, or download from ",
-       "the manuscript Zenodo archive (10.5281/zenodo.20067849).",
+       "a manuscript-monorepo at PDAC_BASE_DIR, or fetch it with ",
+       "pdactrace::download_phase_csvs().",
        call. = FALSE)
 }
 read_phase <- function(stem) {

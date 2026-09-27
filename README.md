@@ -3,11 +3,10 @@
 > Stage-aware PDAC multi-omics atlas and deterministic claim-audit
 > framework for tissue-to-blood biomarker evidence.
 
-[![R-CMD-check](https://github.com/jibeomko/pdactrace/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jibeomko/pdactrace/actions/workflows/R-CMD-check.yaml)
 [![Version](https://img.shields.io/github/v/tag/jibeomko/pdactrace?sort=semver&label=version&color=blue)](https://github.com/jibeomko/pdactrace/tags)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Bioconductor](https://img.shields.io/badge/Bioconductor-submission%20in%20preparation-lightgrey.svg)](https://www.bioconductor.org/)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20076698.svg)](https://doi.org/10.5281/zenodo.20076698)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20068234.svg)](https://doi.org/10.5281/zenodo.20068234)
 
 `pdactrace` is a **stage-aware PDAC multi-omics atlas and
 deterministic biomarker claim-audit framework**. It separates a
@@ -253,7 +252,7 @@ browseURL(fp)
 report_gene(c("LGALS3BP", "LTBP1", "GAPDH"))    # multi-gene panel
 ```
 
-The HTML (~400 KB, self-contained) includes audit components,
+The HTML (~500 KB, self-contained) includes audit components,
 6-axis radar, stage trajectory, per-cohort breakdown, filter
 trace, and an atlas-version provenance footer.
 
@@ -300,8 +299,8 @@ ser <- project_user_serum_cohort(intensity = my_serum,
                                   pan_label  = "Pancreatitis")
 
 # 6c. Combine into one evidence frame + score
-ev    <- assemble_user_evidence(rna_fit       = tis$rna_pattern,
-                                 prot_fit      = tis$prot_pattern,
+ev    <- assemble_user_evidence(rna_fit       = res$rna_pattern,
+                                 prot_fit      = res$prot_pattern,
                                  serum_summary = ser)
 audit <- compute_audit_score(evidence = ev)
 ```
@@ -385,11 +384,14 @@ and claim tiers.
   `≥ 90%` → `0.30`. Caps the Stouffer significance inflation
   that arises from partially overlapping cohorts (e.g.
   TCGA-PAAD and CPTAC-PDAC share donors).
-- **Score class boundaries.** `audit_score ≥ 0.5` →
-  `high_confidence`; `≥ 0.3` → `supported_uncertain`; below 0.3
-  and not gate-zeroed → `low`. Gate-zeroed genes are `excluded`
-  (leakage = 0) or `penalized` (leakage = 0.5). These score
-  classes are separate from blood-biomarker claim tiers.
+- **Score class boundaries.** Gates take precedence over the
+  score: leakage = 0 → `excluded`; leakage = 0.5 → `penalized`;
+  heterogeneity gate below 1 → `supported_uncertain` whatever the
+  score. Otherwise `audit_score ≥ 0.5` → `high_confidence`;
+  `≥ 0.3` → `supported_uncertain`; below 0.3 → `low`. This is why
+  SERPINA1 (0.64) and LTBP1 (0.58) are `supported_uncertain`.
+  These score classes are separate from blood-biomarker claim
+  tiers.
 - **Effect-size threshold (`0.585 = log2(1.5)`).** 1.5-fold
   change is the default "meaningfully detectable" effect size in
   bulk RNA-seq + proteomics literature; used by the
@@ -620,12 +622,14 @@ Four reproducibility layers (full walkthrough in
   evidence lookup, scoring, reporting, visualization.
 - **Layer 2 — user cohort projection.**
   `project_user_cohort()` runs entirely on local inputs.
-- **Layer 3 — processed-input atlas rebuild.** Rebuild
-  `data/pdactrace_reference.rda` from
-  `data-raw/build_reference.R`. In the current release, the seven
-  processed inputs (`multi_cohort_consistency.csv` plus six
-  phase tables) are bundled in `inst/extdata/*.csv.xz`, so the
-  rebuild runs without the manuscript-monorepo.
+- **Layer 3 — processed-input atlas rebuild.** In a git checkout,
+  `data-raw/build_reference.R` reproduces the 64 base columns of
+  `data/pdactrace_reference.rda` exactly; the `data-raw/attach_*.R`
+  scripts add the derived columns. Seven processed inputs
+  (`multi_cohort_consistency.csv` plus six phase tables) are
+  bundled in `inst/extdata/*.csv.xz` and the two larger upstream
+  fits (phase33 RNA, phase34 protein) are in `data-raw/`, so the
+  rebuild needs nothing outside this repository.
 - **Layer 4 — raw-data reanalysis.** FASTQ / raw proteomics
   processing is **outside the scope of this software package**
   and is documented in the associated manuscript workflow
@@ -641,22 +645,22 @@ and will allow lazy on-demand access via
 
 # Citation
 
-If you use `pdactrace`, please cite the software via its Zenodo DOI:
+If you use `pdactrace`, please cite the software via its Zenodo concept DOI,
+which resolves to the latest archived version:
 
-> Ko, J. (2026). *pdactrace: Stage-Aware PDAC Atlas and Tissue-to-Blood
-> Biomarker Claim-Audit Framework* (v0.99.20) [Software]. Zenodo.
-> [10.5281/zenodo.20076698](https://doi.org/10.5281/zenodo.20076698)
+> Ko, J. (2026). *pdactrace: Stage-Aware PDAC Atlas and Prospectively
+> Frozen Tissue-to-Serum Biomarker Audit Framework* [Software]. Zenodo.
+> [10.5281/zenodo.20068234](https://doi.org/10.5281/zenodo.20068234)
 
 ```bibtex
 @software{pdactrace2026,
   author       = {Ko, Jibeom},
-  title        = {{pdactrace: Stage-Aware PDAC Atlas and
-                   Tissue-to-Blood Biomarker Claim-Audit Framework}},
+  title        = {{pdactrace: Stage-Aware PDAC Atlas and Prospectively
+                   Frozen Tissue-to-Serum Biomarker Audit Framework}},
   year         = 2026,
-  version      = {v0.99.20},
   publisher    = {Zenodo},
-  doi          = {10.5281/zenodo.20076698},
-  url          = {https://doi.org/10.5281/zenodo.20076698}
+  doi          = {10.5281/zenodo.20068234},
+  url          = {https://doi.org/10.5281/zenodo.20068234}
 }
 ```
 

@@ -14,6 +14,8 @@
   bundled <- file.path("inst", "extdata",
                         paste0(stem, ".csv.xz"))
   if (file.exists(bundled)) return(bundled)
+  in_repo <- file.path("data-raw", paste0(stem, ".csv"))
+  if (file.exists(in_repo)) return(in_repo)
   # 2. Companion manuscript-monorepo (developer fallback)
   base_dir <- Sys.getenv("PDAC_BASE_DIR",
                           "/home/kjb9412/PDAC_biomarker")

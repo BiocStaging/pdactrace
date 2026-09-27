@@ -88,15 +88,15 @@ if (requireNamespace("DESeq2", quietly = TRUE)) {
 }
 
 \donttest{
-  # Matrix interface (original signature):
-  fit <- fit_stage_de(my_counts, my_stage, my_cohort)
-
-  # SummarizedExperiment interface (Bioconductor-native):
+# SummarizedExperiment interface (Bioconductor-native):
+if (requireNamespace("DESeq2", quietly = TRUE)) {
   library(SummarizedExperiment)
   se <- SummarizedExperiment(
-    assays = list(counts = my_counts),
-    colData = DataFrame(stage = my_stage, cohort = my_cohort))
+    assays = list(counts = toy_counts),
+    colData = DataFrame(stage = toy_coldata$stage,
+                        cohort = toy_coldata$cohort))
   fit <- fit_stage_de(se, stage_col = "stage", cohort_col = "cohort")
   pat <- classify_trajectory(fit)
+}
 }
 }

@@ -64,7 +64,8 @@ gene <- params$gene
 ```
 
 ```{r resolve, include=FALSE}
-ref <- pdactrace::pdactrace_reference
+utils::data("pdactrace_reference", package = "pdactrace", envir = environment())
+ref <- pdactrace_reference
 in_atlas <- gene %in% ref$gene_symbol
 audit <- if (in_atlas) pdactrace::compute_audit_score(gene) else NULL
 detailed <- if (in_atlas) tryCatch(pdactrace::query_gene_detailed(gene),

@@ -35,9 +35,13 @@
 #' classify_trajectory(fit, sig_only = FALSE)
 #'
 #' \donttest{
-#'   fit <- fit_stage_de(my_counts, my_stage, my_cohort)
+#' if (requireNamespace("DESeq2", quietly = TRUE)) {
+#'   data(toy_counts)
+#'   data(toy_coldata)
+#'   fit <- fit_stage_de(toy_counts, toy_coldata$stage, toy_coldata$cohort)
 #'   pat <- classify_trajectory(fit, rho_cutoff = 0.85)
 #'   table(pat$rna_pattern)
+#' }
 #' }
 #' @export
 classify_trajectory <- function(fit, rho_cutoff = 0.85, sig_only = TRUE) {

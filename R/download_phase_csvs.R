@@ -3,24 +3,21 @@
 #' The bundled `inst/extdata` carries the six small downstream phase
 #' tables (phase2c / phase29 / phase42 / phase60 / phase77 / phase80)
 #' but **not** the two large upstream fits — `phase33_deseq2_coef_12template.csv`
-#' (~2.6 MB raw RNA fit) and `phase34_protein_pooled_12template.csv`
-#' (~880 KB protein fit) — because together they push the tarball
-#' past Bioconductor's 5 MB ceiling. This helper fetches them on
-#' demand from the public companion manuscript-monorepo at
-#' `github.com/jibeomko/PDAC_biomarker` (Zenodo archive
-#' [10.5281/zenodo.20067849](https://doi.org/10.5281/zenodo.20067849))
-#' via raw GitHub URLs and caches them locally with [BiocFileCache::BiocFileCache()].
+#' (~2.6 MB RNA fit) and `phase34_protein_pooled_12template.csv`
+#' (~0.9 MB protein fit) — to keep the software tarball small. Both
+#' are gene-level summary statistics and live in `data-raw/` of the
+#' public source repository, `github.com/jibeomko/pdactrace`. This
+#' helper fetches them on demand via raw GitHub URLs and caches them
+#' locally with [BiocFileCache::BiocFileCache()].
 #'
-#' Once the CSVs are in the cache, `data-raw/build_reference.R` and
-#' `data-raw/build_protein_betas.R` pick them up via their
-#' `$PDAC_BASE_DIR/...` fallback (the cache directory just needs to
-#' have a `phase33_*` and `phase34_*` file at predictable paths, or
-#' callers can pass the cached paths to `read_phase()` directly).
+#' A git checkout does not need this helper: `data-raw/build_reference.R`
+#' and `data-raw/build_protein_betas.R` read both files from `data-raw/`
+#' directly.
 #'
 #' @param target Optional character.  Either `"phase33"`, `"phase34"`,
 #'   or `"both"` (default).  Selects which CSV(s) to fetch.
 #' @param ref Git ref (branch / tag / commit) on
-#'   `jibeomko/PDAC_biomarker` to pull from.  Default `"main"`.
+#'   `jibeomko/pdactrace` to pull from.  Default `"main"`.
 #' @param cache A [BiocFileCache::BiocFileCache] object.  Default
 #'   uses the user's standard cache.
 #' @param verbose Logical.  If `TRUE` (default), prints a progress
@@ -54,9 +51,9 @@ download_phase_csvs <- function(target  = c("both", "phase33", "phase34"),
   }
 
   base_url <- paste0(
-    "https://raw.githubusercontent.com/jibeomko/PDAC_biomarker/",
+    "https://raw.githubusercontent.com/jibeomko/pdactrace/",
     ref,
-    "/analysis/manuscript/tissue_to_serum_biomarker/results/")
+    "/data-raw/")
 
   files <- list(
     phase33 = "phase33_deseq2_coef_12template.csv",
