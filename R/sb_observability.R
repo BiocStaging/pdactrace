@@ -5,6 +5,9 @@
 #'
 #' @param detection Data frame with feature, cohort, and detected columns.
 #' @return Data frame with one observability score per feature.
+#' @examples
+#' sim <- sb_simulate(n_features = 20L, seed = 1L)
+#' head(sb_observability(sim$detection), 3)
 #' @export
 sb_observability <- function(detection) {
   if (is.null(detection)) return(NULL)

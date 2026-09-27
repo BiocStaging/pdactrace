@@ -1,9 +1,9 @@
 ---
-title: "5. Cross-cancer demonstration: applying the framework to non-PDAC cohorts"
-author: "pdactrace v0.99.10"
+title: "8. Portability of the R API to a non-PDAC cohort"
+author: "Jibeom Ko"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{5. Cross-cancer demonstration: applying the framework to non-PDAC cohorts}
+  %\VignetteIndexEntry{8. Portability of the R API to a non-PDAC cohort}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -19,15 +19,22 @@ set.seed(42)
 
 # Goal
 
-The bundled `pdactrace_reference` is a PDAC demonstration cohort,
-but the **framework itself is cancer-agnostic**: the 12-template
-trajectory catalog, the 3-axis + 2-gate audit score, the Evidence
-Math layer, and the Class A / B / C translation discipline operate
-on a per-stage expression model (Normal -> Early -> Mid -> Late),
-not on PDAC-specific assumptions. This vignette shows the
-framework being applied to a **non-PDAC cohort** end-to-end via
-the same `project_user_cohort()` entry point that Scenario 6a in
-the README uses.
+**This package is PDAC-specific in scope.** The bundled atlas, the
+anchor reference set, and every validated claim in the other
+vignettes are PDAC. Nothing here extends that scope.
+
+What this vignette does establish is narrower and purely technical:
+the **R API does not hard-code PDAC**. The 12-template trajectory
+catalog, the 3-axis + 2-gate audit score, and the Evidence Math
+layer operate on a per-stage expression model (Normal -> Early ->
+Mid -> Late), so `project_user_cohort()` accepts a cohort from
+another disease without modification. Whether the *results* mean
+anything there is an open question this package does not answer,
+and the "Limitations" section below says so explicitly.
+
+Read this as documentation of an interface boundary -- useful if
+you want to reuse the machinery on your own data -- and not as a
+claim that pdactrace generalises.
 
 We use a **synthetic CRC-flavored cohort** (50 genes x 24
 samples, balanced across stages and cohorts) so the vignette
@@ -163,9 +170,9 @@ signature. For a real cross-cancer publication study you would:
   hematologic malignancies where stage maps differently).
 
 The demonstration here establishes that **the framework's R API
-is cancer-agnostic**, not that the bundled PDAC atlas's results
+accepts non-PDAC input**, not that the bundled PDAC atlas's results
 generalize to other cancers (they should not -- that would be a
-different study).
+different study, with its own cohorts and its own anchor set).
 
 ```{r session_info}
 sessionInfo()

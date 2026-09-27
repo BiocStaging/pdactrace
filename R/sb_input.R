@@ -2,6 +2,9 @@
 #'
 #' @param effects Data frame with one row per feature, cohort, modality, and contrast.
 #' @return A normalized data frame with numeric estimates and standard errors.
+#' @examples
+#' sim <- sb_simulate(n_features = 20L, seed = 1L)
+#' str(sb_validate_effects(sim$effects))
 #' @export
 sb_validate_effects <- function(effects) {
   if (!is.data.frame(effects)) stop("effects must be a data frame.", call. = FALSE)

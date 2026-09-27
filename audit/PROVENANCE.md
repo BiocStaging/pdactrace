@@ -5,7 +5,7 @@
 The frozen score table, the absolute panels and the two one-shot audit records
 in this repository were produced in a separate working repository that carried a
 wider scope (PDAC + LUAD + CRC + HCC) under the working name `stagebridge`.
-That tree is preserved unmodified at:
+Every file that tree tracks is preserved unmodified at:
 
 | | |
 |---|---|
@@ -34,6 +34,50 @@ Consequently:
   directions and decision rule were fixed before any outcome label was opened.
 - The copies under `audit/locks/` are a **disclosure record**, not a verifiable
   artefact in place. To verify, check out the tag above.
+
+## How to verify, and one known discrepancy
+
+Verification was last run on 2026-09-27 against the archive as tagged. All nine
+`lock_manifest_sha256.csv` files resolve, with **one caveat that anyone
+repeating the check will hit immediately**.
+
+Five of the nine manifests hash a root-level `NAMESPACE` of 278 bytes
+(`db4c580afbbf64ab9685526a4e841403f589531a9c5eadd152b126cc3c52f14d`), but the
+`NAMESPACE` at the tagged commit is 331 bytes. Exports were added after those
+five locks were frozen, roxygen rewrote the file, and the tag captured the
+later state. Run naively, those five manifests therefore report exactly one
+mismatched path each, and that path is always `NAMESPACE`.
+
+The 278-byte file itself survives in the archive, tracked by git, inside a
+later lock's frozen snapshot:
+
+```
+prospective/locks/PXD046295_hcc_discovery_precoverage_v1/frozen/snapshots/project/NAMESPACE
+```
+
+Substituting it for the root `NAMESPACE` makes all nine manifests verify with
+zero mismatches. Every other hashed path — decision rules, candidate sets,
+frozen scores, directions, `R/*.R` — matches as recorded, in all nine
+manifests, without substitution.
+
+This is a drift in a generated file, not in any frozen decision artefact, and
+it is recorded here rather than repaired: editing the archive to make the check
+pass cleanly would be the one thing the protocol forbids.
+
+## What the archive still contains
+
+On 2026-09-27 the archive was pruned from 5.3 GB to 72 MB by deleting 280 files
+of third-party bulk data — vendor mass-spectrometry `.raw` files, DIA-NN report
+bodies, `proteinGroups.txt`, GEO series matrices — together with build
+artefacts. All of it is re-obtainable from PRIDE, MassIVE and GEO, and none of
+it was redistributable in the first place; the archive's own `.gitignore`
+excluded it for that reason.
+
+Nothing tracked by git was removed, and the pruning did not touch four
+untracked files that a manifest hashes
+(`prospective/locks/MSV000101183_v1_1/preprocessing/...`, 20 KB in total). The
+nine-manifest verification above was re-run after the pruning with the same
+result. A `git bundle` of all refs, including the tag, is held separately.
 
 ## Files copied, with content hashes at the time of transfer
 

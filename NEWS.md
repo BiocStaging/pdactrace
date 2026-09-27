@@ -1,3 +1,66 @@
+# pdactrace 0.99.21
+
+**PDAC refocus: prespecification and audit layer merged in.** The PDAC
+subset of the wider cross-cancer working tree is now part of the
+package; the non-PDAC analyses stay in the `v0.1.0-pancancer-archive`
+tag and are out of scope here.
+
+## New
+
+- Prespecification and audit layer (13 exports): `stagebridge()`,
+  `sb_one_shot()`, `sb_default_one_shot_rule()`, `sb_pareto_fronts()`,
+  `sb_loco_stability()`, `sb_observability()`, `sb_validate_effects()`,
+  `sb_simulate()`, `sb_method_scores()`,
+  `sb_multiblock_plsda_scores()`, `sb_binary_auc()`,
+  `sb_average_precision()` and `sb_topk_recall()`.
+- `sb_one_shot()` returns a terminal `PASS` / `FAIL` / `INCONCLUSIVE`
+  decision, where `INCONCLUSIVE` records that a frozen gate halted the
+  run before the endpoint was computed and is therefore distinct from a
+  biological `FAIL`.
+- `audit/PROVENANCE.md` records the archive tag, the transfer hashes and
+  the two PDAC one-shot audits, both of which terminated
+  `INCONCLUSIVE` at the prespecified coverage gate.
+
+## Documentation
+
+- New vignette 7, `prespecification_audit`, covers the whole
+  prespecification layer: `stagebridge()` ranking, exact Pareto fronts,
+  leave-one-cohort-out stability, the shipped comparators scored with
+  `sb_binary_auc()` / `sb_average_precision()` / `sb_topk_recall()`, and
+  `sb_one_shot()` driven to `PASS`, `FAIL` and `INCONCLUSIVE`. It reports
+  that StageBridge has the lowest AUROC of the eight methods on the
+  simulated `translation` scenario while ranking second on AUPRC and
+  top-20 recall, rather than selecting a scenario that flatters it.
+- Vignette 8 (formerly "Cross-cancer demonstration") is retitled
+  "Portability of the R API to a non-PDAC cohort" and its opening claim
+  is narrowed from "the framework is cancer-agnostic" to the interface
+  statement its own Limitations section already made: the API accepts
+  non-PDAC input, and no result is claimed outside PDAC.
+- Fixed the vignette index: two vignettes were both numbered 5 and no
+  vignette was numbered 7. Ordinals are now 1-8 with titles matching
+  their `\VignetteIndexEntry`, and stale `author:` version strings are
+  replaced with the maintainer name.
+- `sb_default_one_shot_rule()` now records that its thresholds come from
+  a lock held in the archived working tree, not from a path inside this
+  package.
+
+## Changed
+
+- `DESCRIPTION` and `README.md` state the PDAC-specific scope and the
+  prospectively frozen score layer.
+- Seeds in the new code are scoped with `withr::local_seed()` rather
+  than `set.seed()`, matching the existing BiocCheck-compliant pattern.
+- `stats::reshape()` is called with its namespace qualified.
+
+## Tests
+
+- Added `test-sb-core.R` and `test-sb-one-shot.R`. The one-shot suite is
+  a positive control: it drives the frozen runner to all three terminal
+  states on synthetic input and checks that AUROC rises monotonically
+  with planted signal, so a `PASS` is reachable in principle and the
+  real-data `INCONCLUSIVE` results reflect coverage, not an
+  over-conservative gate.
+
 # pdactrace 0.99.20
 
 **Bioconductor pre-submission polish.** This release keeps the

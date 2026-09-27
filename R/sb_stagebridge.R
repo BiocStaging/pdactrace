@@ -67,6 +67,10 @@ sb_rescore_stagebridge <- function(component_table, weights = sb_default_weights
 #' @return Ranked data frame and auditable component scores. `pareto_tier` is
 #'   populated only when `compute_pareto = TRUE`; `score_percentile_tier` is an
 #'   explicitly separate score-only top-5%/top-20% tier.
+#' @examples
+#' sim <- sb_simulate(n_features = 40L, seed = 1L)
+#' ranked <- stagebridge(sim$effects, detection = sim$detection)
+#' head(ranked[, c("feature", "stagebridge_score", "pareto_front")], 3)
 #' @export
 stagebridge <- function(
     effects,
@@ -200,6 +204,9 @@ stagebridge <- function(
 #' @param source_score Optional source score.
 #' @param top_k Top-ranked set used for selection frequency.
 #' @return Stability summary by feature.
+#' @examples
+#' sim <- sb_simulate(n_features = 40L, seed = 1L)
+#' head(sb_loco_stability(sim$effects, sim$detection, top_k = 10L), 3)
 #' @export
 sb_loco_stability <- function(effects, detection = NULL, source_score = NULL, top_k = 50L) {
   x <- sb_validate_effects(effects)

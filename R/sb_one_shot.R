@@ -8,7 +8,7 @@
 # core that a locked wrapper calls once after outcome access.
 
 sb_panel_score <- function(abundance, panel, selected) {
-  wide <- reshape(
+  wide <- stats::reshape(
     abundance[abundance$gene %in% selected, c("gene", "sample", "log2_abundance")],
     idvar = "gene", timevar = "sample", direction = "wide"
   )
@@ -32,7 +32,7 @@ sb_panel_score <- function(abundance, panel, selected) {
 
 sb_permutation_p <- function(truth, score, replicates, seed) {
   observed <- sb_binary_auc(truth, score)
-  set.seed(seed)
+  withr::local_seed(seed)
   null <- replicate(replicates, sb_binary_auc(sample(truth, replace = FALSE), score))
   (1 + sum(null >= observed, na.rm = TRUE)) / (replicates + 1)
 }
@@ -40,7 +40,7 @@ sb_permutation_p <- function(truth, score, replicates, seed) {
 sb_auc_interval <- function(truth, score, replicates, seed) {
   truth <- as.logical(truth)
   pos <- which(truth); neg <- which(!truth)
-  set.seed(seed)
+  withr::local_seed(seed)
   vals <- replicate(replicates, {
     idx <- c(sample(pos, length(pos), replace = TRUE), sample(neg, length(neg), replace = TRUE))
     sb_binary_auc(truth[idx], score[idx])
@@ -57,7 +57,7 @@ sb_feature_replication <- function(abundance, frozen, selected, groups, min_dete
   ]
   eligible <- eligible[eligible$gene %in% testable, ]
   if (!nrow(eligible)) return(data.frame())
-  wide <- reshape(
+  wide <- stats::reshape(
     eligible[, c("gene", "sample", "log2_abundance")],
     idvar = "gene", timevar = "sample", direction = "wide"
   )
@@ -109,6 +109,38 @@ sb_feature_replication <- function(abundance, frozen, selected, groups, min_dete
 #' @param rule Named list of frozen thresholds (see [sb_default_one_shot_rule()]).
 #' @return A terminal decision list with `status`, `gates`, `statistical_runner_entered`
 #'   and, when the runner ran, the endpoint statistics.
+#' @examples
+#' frozen <- data.frame(
+#'   feature = sprintf("G%03d", 1:320),
+#'   frozen_direction = rep(c(1L, -1L), length.out = 320L)
+#' )
+#' panel <- data.frame(
+#'   feature = frozen$feature[1:20],
+#'   frozen_direction = frozen$frozen_direction[1:20],
+#'   rank_weight = 1 / log2(2:21)
+#' )
+#' samples <- c(sprintf("CP_%02d", 1:20), sprintf("CN_%02d", 1:20),
+#'              sprintf("HC_%02d", 1:20))
+#' abundance <- expand.grid(
+#'   gene = frozen$feature[1:50], sample = samples,
+#'   KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE
+#' )
+#' abundance$group <- sub("_.*$", "", abundance$sample)
+#' abundance$log2_abundance <- withr::with_seed(
+#'   1, stats::rnorm(nrow(abundance), 8, 1)
+#' )
+#'
+#' # Only 50 of the 320 frozen candidates are quantifiable, so the frozen
+#' # coverage gate halts before the endpoint runs: a terminal INCONCLUSIVE,
+#' # which is operationally distinct from a biological FAIL.
+#' decision <- sb_one_shot(
+#'   abundance, frozen, panel,
+#'   groups = list(case = "CP", primary_reference = "CN",
+#'                 secondary_reference = "HC"),
+#'   expected_counts = c(CP = 20L, CN = 20L, HC = 20L)
+#' )
+#' decision$status
+#' decision$failed_gates
 #' @export
 sb_one_shot <- function(abundance, frozen, panel, groups, expected_counts,
                         rule = sb_default_one_shot_rule()) {
@@ -192,7 +224,18 @@ sb_one_shot <- function(abundance, frozen, panel, groups, expected_counts,
 
 #' Default frozen thresholds for [sb_one_shot()]
 #'
-#' Mirrors the PXD055218 CRC decision rule (`prospective/locks/PXD055218_crc_v1/DECISION_RULE.json`).
+#' These are the thresholds as first frozen in
+#' `prospective/locks/PXD055218_crc_v1/DECISION_RULE.json`, which lives in
+#' the archived cross-cancer working tree rather than in this package (see
+#' `audit/PROVENANCE.md`). They are reused unchanged as the PDAC default so
+#' that the numbers are traceable to a rule that predates any PDAC outcome
+#' label, and `tests/testthat/test-sb-one-shot.R` keeps a golden-equivalence
+#' test against that original audit. Supply your own `rule` to
+#' [sb_one_shot()] for a new lock.
+#' @return Named list of the frozen coverage, endpoint and resampling
+#'   thresholds consumed by [sb_one_shot()].
+#' @examples
+#' str(sb_default_one_shot_rule())
 #' @export
 sb_default_one_shot_rule <- function() {
   list(

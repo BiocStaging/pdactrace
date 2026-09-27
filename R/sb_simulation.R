@@ -9,6 +9,9 @@
 #'   a default StageBridge assumption.
 #' @param seed Random seed.
 #' @return List with effects, detection, and feature-level truth.
+#' @examples
+#' sim <- sb_simulate(n_features = 40L, seed = 1L)
+#' vapply(sim, nrow, integer(1))
 #' @export
 sb_simulate <- function(
     n_features = 1200L,
@@ -20,7 +23,7 @@ sb_simulate <- function(
     ),
     seed = 1L) {
   scenario <- match.arg(scenario)
-  set.seed(seed)
+  withr::local_seed(seed)
   features <- sprintf("G%05d", seq_len(n_features))
   n_positive <- max(2L, round(n_features * positive_fraction))
   truth <- rep(FALSE, n_features)

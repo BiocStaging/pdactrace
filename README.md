@@ -587,14 +587,21 @@ size.
 # Vignettes
 
 ```r
-vignette("lookup_basics",            package = "pdactrace")
-vignette("audit_case_studies",       package = "pdactrace")
-vignette("audit_framework",          package = "pdactrace")
-vignette("user_cohort_extension",    package = "pdactrace")
-vignette("methodology_validation",   package = "pdactrace")
-vignette("cross_cancer_demonstration", package = "pdactrace")
-vignette("reproducibility",          package = "pdactrace")
+vignette("lookup_basics",              package = "pdactrace")  # 1
+vignette("audit_case_studies",         package = "pdactrace")  # 2
+vignette("audit_framework",            package = "pdactrace")  # 3
+vignette("user_cohort_extension",      package = "pdactrace")  # 4
+vignette("reproducibility",            package = "pdactrace")  # 5
+vignette("methodology_validation",     package = "pdactrace")  # 6
+vignette("prespecification_audit",     package = "pdactrace")  # 7
+vignette("cross_cancer_demonstration", package = "pdactrace")  # 8
 ```
+
+Vignette 7 covers the prespecification layer: `stagebridge()` ranking,
+Pareto fronts, leave-one-cohort-out stability, the shipped comparators,
+and `sb_one_shot()` driven to all three terminal states. Vignette 8
+documents only that the R API accepts non-PDAC input; the package's
+scope and every validated claim remain PDAC-specific.
 
 # Reproducibility
 

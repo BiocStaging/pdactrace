@@ -1,6 +1,6 @@
 ---
 title: "5. Reproducibility from raw data"
-author: "pdactrace"
+author: "Jibeom Ko"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >

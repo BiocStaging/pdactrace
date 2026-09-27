@@ -2,6 +2,8 @@
 #'
 #' @param components Numeric matrix; larger values are preferred.
 #' @return Integer front labels, where 1 is non-dominated.
+#' @examples
+#' sb_pareto_fronts(cbind(a = c(1, 0.5, 0.2), b = c(0.2, 0.6, 0.1)))
 #' @export
 sb_pareto_fronts <- function(components) {
   x <- as.matrix(components)

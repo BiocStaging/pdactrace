@@ -4,6 +4,9 @@
 #' @param detection Optional blood detection table.
 #' @param source_score Optional source score used by StageBridge only.
 #' @return Wide feature-by-method score table.
+#' @examples
+#' sim <- sb_simulate(n_features = 20L, seed = 1L)
+#' head(sb_method_scores(sim$effects, sim$detection), 3)
 #' @export
 sb_method_scores <- function(effects, detection = NULL, source_score = NULL) {
   x <- sb_prepare_effects(effects)
@@ -75,6 +78,14 @@ sb_method_scores <- function(effects, detection = NULL, source_score = NULL) {
 #' @param design Off-diagonal connection strength between omics blocks.
 #' @return A feature-by-score data frame. The fitted model is attached as the
 #'   `model` attribute.
+#' @examples
+#' if (requireNamespace("mixOmics", quietly = TRUE)) {
+#'   outcome <- factor(rep(c("Normal", "Tumor"), each = 12))
+#'   dn <- list(paste0("S", seq_len(24)), paste0("F", seq_len(8)))
+#'   rna <- matrix(withr::with_seed(7, stats::rnorm(24 * 8)), 24, dimnames = dn)
+#'   protein <- rna + withr::with_seed(8, stats::rnorm(24 * 8, sd = 0.5))
+#'   head(sb_multiblock_plsda_scores(list(RNA = rna, Protein = protein), outcome), 3)
+#' }
 #' @export
 sb_multiblock_plsda_scores <- function(blocks, outcome, ncomp = 2L, design = 0.1) {
   if (!requireNamespace("mixOmics", quietly = TRUE)) {

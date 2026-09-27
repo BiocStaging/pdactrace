@@ -7,7 +7,7 @@ output:
     toc: true
     toc_depth: 2
 vignette: >
-  %\VignetteIndexEntry{2. Audit-class case studies (4 genes, one per audit class)}
+  %\VignetteIndexEntry{2. Audit-class case studies — LGALS3BP / LTBP1 / ALB / GAPDH}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

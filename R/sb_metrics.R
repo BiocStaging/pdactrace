@@ -1,6 +1,10 @@
 #' Binary area under the ROC curve
 #' @param truth Logical or binary vector.
 #' @param score Numeric score; larger values predict positives.
+#' @return A single numeric value in `[0, 1]`, or `NA_real_` when either
+#'   class is absent after dropping missing and non-finite entries.
+#' @examples
+#' sb_binary_auc(c(TRUE, TRUE, FALSE, FALSE), c(4, 3, 2, 1))
 #' @export
 sb_binary_auc <- function(truth, score) {
   keep <- !is.na(truth) & is.finite(score)
@@ -16,6 +20,11 @@ sb_binary_auc <- function(truth, score) {
 #' Average precision
 #' @param truth Logical or binary vector.
 #' @param score Numeric score; larger values predict positives.
+#' @return A single numeric value in `[0, 1]`, or `NA_real_` when no
+#'   positive remains after dropping missing and non-finite entries. Tied
+#'   scores are collapsed into one threshold.
+#' @examples
+#' sb_average_precision(c(TRUE, FALSE, TRUE, FALSE), c(4, 3, 2, 1))
 #' @export
 sb_average_precision <- function(truth, score) {
   keep <- !is.na(truth) & is.finite(score)
@@ -36,6 +45,11 @@ sb_average_precision <- function(truth, score) {
 #' @param truth Logical or binary vector.
 #' @param score Numeric score.
 #' @param k Number of top candidates.
+#' @return A single numeric value in `[0, 1]` giving the fraction of
+#'   positives recovered in the top `k` scores, or `NA_real_` when no
+#'   positive remains after dropping missing and non-finite entries.
+#' @examples
+#' sb_topk_recall(c(TRUE, TRUE, FALSE, FALSE), c(4, 3, 2, 1), k = 2)
 #' @export
 sb_topk_recall <- function(truth, score, k = 50L) {
   keep <- !is.na(truth) & is.finite(score)

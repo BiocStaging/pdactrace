@@ -1,6 +1,6 @@
 ---
 title: "4. Apply pdactrace to your own multi-omics cohort"
-author: "pdactrace v0.4.0"
+author: "Jibeom Ko"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{4. Apply pdactrace to your own multi-omics cohort}

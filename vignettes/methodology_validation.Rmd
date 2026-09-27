@@ -1,6 +1,6 @@
 ---
 title: "6. Methodology validation: cutoff sensitivity + tool comparison"
-author: "pdactrace v0.99.10"
+author: "Jibeom Ko"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{6. Methodology validation: cutoff sensitivity + tool comparison}

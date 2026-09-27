@@ -1,0 +1,290 @@
+---
+title: "7. Prespecified scoring and the frozen one-shot audit"
+author: "Jibeom Ko"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{7. Prespecified scoring and the frozen one-shot audit}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+suppressPackageStartupMessages(library(pdactrace))
+set.seed(42)
+```
+
+# Goal
+
+The vignettes so far audit evidence that is already in hand. This one
+covers the other half of the package: ranking tissue-to-blood candidates
+from stage-resolved effect tables, and then **committing to a decision
+rule before the destination cohort is opened**.
+
+The motivation is a negative result. Two PDAC serum audits were
+prespecified, hashed, externally timestamped, and opened exactly once.
+Both terminated without producing a performance statistic, because the
+frozen candidate panel was not quantifiable at the required depth in the
+public serum deposits. The record is in `audit/PROVENANCE.md` in the
+source repository. That is why the runner below has a terminal
+`INCONCLUSIVE` state that is deliberately *not* a failure of the marker.
+
+Everything in this vignette runs on simulated data, so no download is
+needed and the numbers are reproducible from the seeds shown.
+
+# Step 1 -- A simulated multi-cohort, multi-omic benchmark
+
+`sb_simulate()` generates a stage-resolved effect table, a blood
+detection table, and the feature-level truth used only for evaluation.
+The `translation` scenario plants coherent tissue-only decoys and
+inflammation-associated blood decoys, so a method that merely rewards
+strong tissue signal can be caught out.
+
+```{r simulate}
+sim <- sb_simulate(n_features = 400L, scenario = "translation", seed = 1L)
+vapply(sim, nrow, integer(1))
+```
+
+`sb_validate_effects()` is the input contract. It normalises the five
+required columns, drops non-finite estimates, and refuses duplicated
+feature/cohort/modality/contrast rows rather than silently averaging
+them.
+
+```{r validate}
+effects <- sb_validate_effects(sim$effects)
+str(effects[, c("feature", "cohort", "modality", "contrast", "estimate")])
+unique(effects$modality)
+```
+
+# Step 2 -- Depth-adjusted blood observability
+
+A detection in a shallow cohort is more informative than the same
+detection in a cohort where nearly everything is seen, so raw detection
+frequency is not used directly.
+
+```{r observability}
+head(sb_observability(sim$detection), 3)
+```
+
+# Step 3 -- Rank candidates
+
+`stagebridge()` combines eight components into a weighted geometric
+score. The geometric form matters: a candidate with one near-zero
+component cannot be rescued by the other seven, which is the intended
+behaviour for a translation claim.
+
+`target_relation` must be declared **before** looking at the
+destination data. `"concordant"` asks for tissue and blood to move the
+same way; `"inverse"` asks for the opposite; `"agnostic"` scores
+magnitude only.
+
+```{r rank}
+ranked <- stagebridge(
+  sim$effects,
+  detection = sim$detection,
+  target_relation = "concordant"
+)
+head(ranked[, c(
+  "feature", "stagebridge_score", "score_rank",
+  "pareto_front", "pareto_tier"
+)], 5)
+```
+
+Two tiers are reported and they are deliberately separate.
+`pareto_front` is exact non-dominance over the eight components;
+`score_percentile_tier` is a score-only cut. A candidate can lead on
+score while being dominated, and that disagreement is information.
+
+```{r pareto}
+components <- ranked[, c(
+  "target", "anchor", "evidence", "replication",
+  "concordance", "observability", "coverage", "source"
+)]
+table(sb_pareto_fronts(components))[1:4]
+```
+
+# Step 4 -- Does the ranking survive dropping a cohort?
+
+```{r loco}
+loco <- sb_loco_stability(sim$effects, sim$detection, top_k = 20L)
+head(loco, 3)
+```
+
+`worst_loco_rank` is the number to read. A candidate whose median rank
+is 2 but whose worst leave-one-cohort-out rank is 150 is carried by a
+single cohort.
+
+# Step 5 -- Comparators, scored honestly
+
+The package ships the comparators rather than only its own score, so
+that claims of improvement can be checked instead of asserted.
+
+```{r comparators}
+scores <- sb_method_scores(sim$effects, sim$detection)
+truth <- sim$truth$truth[match(scores$feature, sim$truth$feature)]
+methods <- setdiff(names(scores), "feature")
+
+evaluation <- data.frame(
+  method = methods,
+  auroc = vapply(methods, function(m) {
+    sb_binary_auc(truth, scores[[m]])
+  }, numeric(1)),
+  auprc = vapply(methods, function(m) {
+    sb_average_precision(truth, scores[[m]])
+  }, numeric(1)),
+  recall_top20 = vapply(methods, function(m) {
+    sb_topk_recall(truth, scores[[m]], k = 20L)
+  }, numeric(1)),
+  row.names = NULL
+)
+evaluation[order(-evaluation$auroc), ]
+```
+
+On this scenario StageBridge has the **lowest AUROC of the eight
+methods** while ranking second on AUPRC and on top-20 recall. That is
+the expected shape of the trade-off, not a bug: the score is tuned to
+put translatable candidates at the very top of a shortlist, and it pays
+for that with global ranking quality. `observed_rank_product` beats it
+on all three summaries here. Read this as a demonstration of the
+evaluation harness, not as a claim that one method dominates -- a single
+simulated scenario cannot settle that, and the scenario argument exists
+precisely so that assumptions can be violated on purpose.
+
+`sb_multiblock_plsda_scores()` is the matched-sample comparator. Unlike
+everything above it needs the same observations, in the same order, in
+every block, so it does not apply to unpaired cohort-level effect
+tables. It is shown here for completeness.
+
+```{r mbplsda, eval = requireNamespace("mixOmics", quietly = TRUE)}
+outcome <- factor(rep(c("Normal", "Tumor"), each = 12))
+dn <- list(paste0("S", seq_len(24)), paste0("F", seq_len(8)))
+rna <- matrix(stats::rnorm(24 * 8), nrow = 24, dimnames = dn)
+protein <- rna + stats::rnorm(24 * 8, sd = 0.5)
+head(sb_multiblock_plsda_scores(list(RNA = rna, Protein = protein), outcome), 3)
+```
+
+# Step 6 -- The frozen one-shot audit
+
+Everything above is exploratory and re-runnable. `sb_one_shot()` is not.
+It takes a frozen panel, a frozen direction per feature, and a rule
+fixed in advance, then returns exactly one of `PASS`, `FAIL` or
+`INCONCLUSIVE`.
+
+```{r rule}
+str(sb_default_one_shot_rule())
+```
+
+The gate stack runs first: group ontology and counts, broad candidate
+coverage, top-10 and top-20 panel coverage, and complete-panel
+quantifiability. The statistical endpoint runs **only** if every gate
+passes.
+
+```{r fixture}
+make_cohort <- function(delta, n_covered = 320L, seed = 20260719L) {
+  frozen <- data.frame(
+    feature = sprintf("G%03d", 1:320),
+    frozen_direction = rep(c(1L, -1L), length.out = 320L)
+  )
+  panel <- data.frame(
+    feature = frozen$feature[1:20],
+    frozen_direction = frozen$frozen_direction[1:20],
+    rank_weight = 1 / log2(2:21)
+  )
+  samples <- c(
+    sprintf("CP_%02d", 1:20), sprintf("CN_%02d", 1:20),
+    sprintf("HC_%02d", 1:20)
+  )
+  grid <- expand.grid(
+    gene = frozen$feature[seq_len(n_covered)], sample = samples,
+    KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE
+  )
+  grid$group <- sub("_.*$", "", grid$sample)
+  grid$log2_abundance <- withr::with_seed(
+    seed, stats::rnorm(nrow(grid), 8, 1)
+  )
+  if (delta != 0) {
+    hit <- grid$group == "CP" & grid$gene %in% panel$feature[1:10]
+    direction <- panel$frozen_direction[match(grid$gene, panel$feature)]
+    grid$log2_abundance[hit] <-
+      grid$log2_abundance[hit] + delta * direction[hit]
+  }
+  list(
+    abundance = grid, frozen = frozen, panel = panel,
+    groups = list(
+      case = "CP", primary_reference = "CN", secondary_reference = "HC"
+    ),
+    counts = c(CP = 20L, CN = 20L, HC = 20L)
+  )
+}
+
+# Fewer resamples than the locked rule, to keep the vignette quick.
+quick_rule <- function() {
+  rule <- sb_default_one_shot_rule()
+  rule$permutation_replicates <- 200L
+  rule$bootstrap_replicates <- 200L
+  rule
+}
+
+audit <- function(...) {
+  cohort <- make_cohort(...)
+  sb_one_shot(
+    cohort$abundance, cohort$frozen, cohort$panel,
+    cohort$groups, cohort$counts, quick_rule()
+  )
+}
+```
+
+A cohort with a real planted signal reaches `PASS`:
+
+```{r pass}
+passed <- audit(delta = 1.2)
+c(status = passed$status, auc = round(passed$primary$auc, 3))
+```
+
+The same cohort with the signal removed reaches `FAIL`. The endpoint
+ran and did not meet the criteria -- this is a statement about the
+biology:
+
+```{r fail}
+failed <- audit(delta = 0)
+c(status = failed$status, runner_entered = failed$statistical_runner_entered)
+```
+
+Now the case that both real PDAC audits hit. The signal is still
+present, but only 50 of the 320 frozen candidates are quantifiable, so
+the coverage gate halts execution before the endpoint. The result is
+`INCONCLUSIVE`: the test never ran, and nothing has been learned about
+the marker:
+
+```{r inconclusive}
+halted <- audit(delta = 1.2, n_covered = 50L)
+c(status = halted$status, runner_entered = halted$statistical_runner_entered)
+halted$failed_gates
+```
+
+Collapsing that third outcome into `FAIL` would have reported a
+biological conclusion that the data cannot support. Keeping it separate
+is the point of the design.
+
+# Why a calibration check matters
+
+A gate stack strict enough never to pass anything would produce the same
+`INCONCLUSIVE` results on real data while proving nothing. The package's
+test suite therefore drives the runner to all three terminal states and
+checks that AUROC rises monotonically with the size of the planted
+signal (`tests/testthat/test-sb-one-shot.R`). `PASS` is reachable, so
+the real-data terminations are attributable to assay coverage rather
+than to an over-conservative rule.
+
+# Scope
+
+The two recorded PDAC audits, their accessions and their terminal states
+are documented in `audit/PROVENANCE.md`. The lock manifests hash paths
+relative to the root of the archived working tree and are covered by
+external RFC 3161 timestamps, so they verify only inside that archive;
+the copies under `audit/locks/` are a disclosure record. Regenerating a
+manifest would destroy the property it exists to establish.
+
+```{r session_info}
+sessionInfo()
+```

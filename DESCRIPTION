@@ -2,7 +2,7 @@ Package: pdactrace
 Type: Package
 Title: Stage-Aware PDAC Atlas and Prospectively Frozen Tissue-to-Serum
     Biomarker Audit Framework
-Version: 0.99.20
+Version: 0.99.21
 Authors@R: c(
     person(given = "Jibeom", family = "Ko",
            email = "rhwlqja1779@gmail.com",
@@ -22,7 +22,9 @@ Description: pdactrace implements a transparent, deterministic
     layer supports freezing candidate scores, directions and a
     decision rule under a content hash before outcome labels are
     opened, with a distinct inconclusive terminal state when a frozen
-    gate fails. Scope is deliberately PDAC-specific: no supervised
+    gate fails. Scope is deliberately PDAC-specific: the bundled atlas,
+    the anchor reference set and every validated claim are PDAC, and no
+    result is claimed for any other disease. Separately, no supervised
     classifier is trained or shipped, because validated non-circular
     early-detection ground truth is unavailable in PDAC.
 License: MIT + file LICENSE
