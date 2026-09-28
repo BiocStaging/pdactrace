@@ -2,8 +2,8 @@ sb_lock_manifest <- function(paths, root = ".") {
   if (!requireNamespace("digest", quietly = TRUE)) {
     stop("Install digest to create a prospective lock manifest.", call. = FALSE)
   }
-  root <- normalizePath(root, mustWork = TRUE)
-  paths <- sort(unique(normalizePath(paths, mustWork = TRUE)))
+  root <- normalizePath(root, winslash = "/", mustWork = TRUE)
+  paths <- sort(unique(normalizePath(paths, winslash = "/", mustWork = TRUE)))
   prefix <- paste0(root, .Platform$file.sep)
   if (any(!startsWith(paths, prefix))) {
     stop("Every locked file must be inside root.", call. = FALSE)
@@ -27,7 +27,7 @@ sb_verify_lock_manifest <- function(manifest, root = ".") {
   if (!is.data.frame(manifest) || !all(required %in% names(manifest))) {
     stop("manifest must contain path, bytes and sha256 columns.", call. = FALSE)
   }
-  root <- normalizePath(root, mustWork = TRUE)
+  root <- normalizePath(root, winslash = "/", mustWork = TRUE)
   paths <- file.path(root, manifest$path)
   exists <- file.exists(paths)
   current_bytes <- rep(NA_real_, length(paths))

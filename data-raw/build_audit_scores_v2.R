@@ -11,7 +11,7 @@
 suppressPackageStartupMessages({ library(data.table) })
 
 PKG <- rprojroot::find_package_root_file()
-devtools::load_all(PKG, quiet = TRUE)
+pkgload::load_all(PKG, quiet = TRUE)
 
 ref_path <- file.path(PKG, "data", "pdactrace_reference.rda")
 load(ref_path)
@@ -80,7 +80,7 @@ other_cols <- setdiff(names(ref), audit_block)
 setcolorder(ref, c(other_cols, audit_block))
 
 # ── Write back ─────────────────────────────────────────────────
-pdactrace_reference <- as.data.frame(ref, stringsAsFactors = FALSE)
+pdactrace_reference <- setkey(ref, gene_symbol)   # keyed data.table, as build_reference.R saves it
 save(pdactrace_reference, file = ref_path, compress = "xz")
 
 # ── Verification ───────────────────────────────────────────────

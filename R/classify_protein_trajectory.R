@@ -11,7 +11,8 @@
 #'
 #' @param fit A `data.table` returned by [fit_stage_de_protein()].
 #' @param rho_cutoff Numeric. Minimum Pearson rho for assignment.
-#'   Default 0.85 (matches phase34 canonical).
+#'   Default 0.85. The bundled protein layer (phase34) was built with a
+#'   cutoff of 0.75; pass `rho_cutoff = 0.75` to reproduce its labels.
 #' @param sig_only Logical. If `TRUE` (default), restrict to
 #'   `lrt_significant == TRUE` rows.
 #' @param ... Forwarded to `classify_protein_trajectory()` when invoked

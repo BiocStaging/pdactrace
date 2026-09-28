@@ -23,9 +23,11 @@ rule before the destination cohort is opened**.
 
 The motivation is a negative result. Two PDAC serum audits were
 prespecified, hashed, externally timestamped, and opened exactly once.
-Both terminated without producing a performance statistic, because the
-frozen candidate panel was not quantifiable at the required depth in the
-public serum deposits. The record is in `audit/PROVENANCE.md` in the
+Both terminated without producing a performance statistic: one stopped
+at a label-blind technical QC gate because too few frozen candidates were
+quantifiable in the public serum deposit, and the other lock of that
+dataset and the second dataset stopped because the deposited outcome
+labels did not match what had been frozen. The record is in `audit/PROVENANCE.md` in the
 source repository. That is why the runner below has a terminal
 `INCONCLUSIVE` state that is deliberately *not* a failure of the marker.
 
@@ -250,9 +252,9 @@ failed <- audit(delta = 0)
 c(status = failed$status, runner_entered = failed$statistical_runner_entered)
 ```
 
-Now the case that both real PDAC audits hit. The signal is still
-present, but only 50 of the 320 frozen candidates are quantifiable, so
-the coverage gate halts execution before the endpoint. The result is
+Now a coverage failure, the case behind the first real PDAC lock. The
+signal is still present, but only 50 of the 320 frozen candidates are
+quantifiable, so the coverage gate halts execution before the endpoint. The result is
 `INCONCLUSIVE`: the test never ran, and nothing has been learned about
 the marker:
 
@@ -273,8 +275,8 @@ A gate stack strict enough never to pass anything would produce the same
 test suite therefore drives the runner to all three terminal states and
 checks that AUROC rises monotonically with the size of the planted
 signal (`tests/testthat/test-sb-one-shot.R`). `PASS` is reachable, so
-the real-data terminations are attributable to assay coverage rather
-than to an over-conservative rule.
+the real-data terminations are attributable to assay coverage and to
+outcome-label mismatches rather than to an over-conservative rule.
 
 # Scope
 

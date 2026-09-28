@@ -104,19 +104,23 @@ without computing a performance statistic.
 
 | Lock | Dataset | Endpoint | Terminal state |
 |---|---|---|---|
-| `MSV000101183` (v1, v1_1, v2) | MassIVE MSV000101183 serum | PDAC vs healthy control | `INCONCLUSIVE_TECHNICAL_QC` — prespecified label-blind technical QC failed |
-| `PXD067770` | PRIDE PXD067770 serum | PDAC vs control | `INCONCLUSIVE` — mapping/coverage gate mismatch |
+| `MSV000101183` v1_1 | MassIVE MSV000101183 serum | PDAC vs healthy control | `INCONCLUSIVE_TECHNICAL_QC` — prespecified label-blind technical QC failed (11 assay-eligible targets, pooled-QC median CV 1.0) |
+| `MSV000101183` v2 | MassIVE MSV000101183 serum | PDAC vs healthy control | `INCONCLUSIVE` — an outcome row carried the term `pooled`, absent from the frozen dictionary (`OUTCOME_SCHEMA_OR_COUNT_MISMATCH`) |
+| `PXD067770` | PRIDE PXD067770 serum | PDAC vs control | `INCONCLUSIVE` — group counts after label mapping did not equal the timestamped 12/36/12 (`TIMESTAMPED_GROUP_MAPPING_MISMATCH`) |
+
+`MSV000101183` v1 was superseded by v1_1 before any data were downloaded (`SUPERSESSION.md`).
 
 Neither audit reached an AUC or a p-value. This is the designed behaviour of a
 terminal inconclusive state, not a missing analysis, and it must be reported
 alongside any use of the frozen scores rather than omitted.
 
-The recurring cause in both cases was assay coverage: the frozen candidate set
-could not be detected at the required depth in undepleted public serum
-proteomes. This is consistent with the published behaviour of the plasma and
-serum matrix, where only a small fraction of tumour tissue proteins is
-observable and secreted proteins are detected far more readily than
-intracellular ones. The two terminations are therefore treated as evidence
-about the feasibility of public-deposit transfer, and as the documented
-justification for collecting a purpose-designed cohort, rather than as failed
-attempts to be set aside.
+The terminations have two different causes. `MSV000101183` v1_1 stopped at
+assay quality: the frozen candidate set could not be quantified at the required
+depth and reproducibility in undepleted public serum, consistent with the
+published behaviour of the serum matrix, where only a small fraction of tumour
+tissue proteins is observable. `MSV000101183` v2 and `PXD067770` stopped on the
+outcome side: the deposited labels did not match the frozen dictionary or the
+timestamped group counts, and the locked rule forbids repairing the mapping after
+outcome access. Together they are treated as evidence about the feasibility of
+public-deposit transfer, and as the documented justification for collecting a
+purpose-designed cohort, rather than as failed attempts to be set aside.

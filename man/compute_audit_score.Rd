@@ -20,16 +20,22 @@ applies identically to either input.}
 A data.table with \code{evidence_strength},
 \code{biological_coherence}, \code{translational_relevance},
 \code{leakage_gate}, \code{heterogeneity_gate}, \code{positive_score},
-\code{audit_score}, and \code{audit_class}.
+\code{audit_score} (rescaled to the table maximum), and \code{audit_class}.
 }
 \description{
 Aggregates the seven implementation features into three transparent
 evidence axes (\code{evidence_strength}, \code{biological_coherence},
 \code{translational_relevance}) and applies two pre-specified reliability
-gates (\code{leakage_gate}, \code{heterogeneity_gate}) before computing
-\code{audit_score = positive_score * leakage_gate * heterogeneity_gate}.
-Each gene receives one of four \code{audit_class} labels:
-\code{high_confidence}, \code{supported_uncertain}, \code{penalized}, or \code{excluded}.
+gates (\code{leakage_gate}, \code{heterogeneity_gate}), then rescales by the
+largest gated score in the scored table:
+\code{audit_score = positive_score * leakage_gate * heterogeneity_gate / max(...)}.
+The score is therefore relative to the best-scoring gene of the table
+it is computed on (the bundled atlas by default, or \code{evidence}).
+Each gene receives one of five \code{audit_class} labels. Gates take
+precedence over the score: \code{excluded} (leakage gate 0), \code{penalized}
+(leakage gate below 1), \code{supported_uncertain} (heterogeneity gate
+below 1), and otherwise \code{high_confidence} (score >= 0.5),
+\code{supported_uncertain} (>= 0.3) or \code{low}.
 }
 \details{
 This is not a supervised biomarker predictor; the formula is

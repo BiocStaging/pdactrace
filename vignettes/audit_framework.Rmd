@@ -29,8 +29,8 @@ prioritization. The framework summarises each gene along **three
 evidence axes** (`evidence_strength`, `biological_coherence`,
 `translational_relevance`), applies **two reliability gates**
 (`leakage_gate`, `heterogeneity_gate`), and assigns it to one of
-**four audit classes** (`high_confidence`, `supported_uncertain`,
-`penalized`, `excluded`). Unlike a supervised biomarker predictor,
+**five audit classes** (`high_confidence`, `supported_uncertain`,
+`penalized`, `excluded`, `low`). Unlike a supervised biomarker predictor,
 the rule combines pre-specified weights with deterministic gating
 and Monte Carlo uncertainty propagation, exposing cohort
 heterogeneity, layer agreement, and artifact risk.
@@ -70,7 +70,7 @@ g$nodes
 #    compose the three axes; mapping table is in supplement S1)
 extract_graph_features("LTBP1")
 
-# 3. Compute the 3-axis + 2-gate audit score and 4-class label
+# 3. Compute the 3-axis + 2-gate audit score and audit class
 compute_audit_score("LTBP1")
 
 # 4. Propagate uncertainty by Monte Carlo (N=200 here for speed)
@@ -101,7 +101,7 @@ ltbp1_unc <- propagate_uncertainty("LTBP1", n_mc = 200, seed = 42)
 ltbp1_unc
 ```
 
-The wide 95% CI (roughly `[0.26, 0.88]` at N=500 MC iterations) is the
+The wide 95% CI (roughly `[0.26, 0.86]` at N=500 MC iterations) is the
 honest readout: LTBP1 is a credible candidate but its uncertainty is
 real and traceable to cohort divergence, not buried under a single
 point estimate.
@@ -143,7 +143,7 @@ case_study(c("LTBP1", "GAPDH", "THBS2", "ALB", "AMBP",
              "SERPINA1", "ANPEP"))
 ```
 
-Each gene receives an `audit_class` (4-class output of the frozen
+Each gene receives an `audit_class` (5-class output of the frozen
 rule) and a `pdactrace_call` (provenance-aware label that combines
 class with anchor / tier / artifact context):
 

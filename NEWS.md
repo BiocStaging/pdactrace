@@ -1,3 +1,43 @@
+# pdactrace 0.99.22
+
+## Bug fixes
+
+- `propagate_uncertainty()` perturbed the pre-v0.3.0 seven-feature score
+  (weights 0.20/0.20/0.20/0.10/0.10) instead of the 3-axis score that
+  `compute_audit_score()` returns, so its intervals, rank intervals and
+  `confidence_class` described a different score. SERPINA1 scored 0.6406
+  but had a Monte Carlo median of 0.520 (the old formula gives 0.519). The
+  loop now uses the 3-axis formula (SERPINA1 median 0.641). Only template
+  rho, cohort agreement and I2 are perturbed, as before.
+- The stored Monte Carlo columns of `pdactrace_reference`
+  (`audit_score_median`, `_lo95`, `_hi95`, `audit_uncertainty_width`,
+  `audit_rank_*`, `audit_confidence_class`) were regenerated with the fixed
+  loop (500 draws, seed 42); every other column is byte-identical.
+  `data-raw/monte_carlo_uncertainty.R`, which no longer ran on the current
+  atlas, now calls the package's own loop, and its stale figures were
+  removed. `confidence_class` counts: `stable_high` 241 -> 153,
+  `high_uncertain` 820 -> 622, `medium` 684 -> 509, `low` 8337 -> 8798.
+- `sb_lock_manifest()` failed on Windows ("Every locked file must be inside
+  root") because `normalizePath()` returned backslashes while the prefix
+  check used `/`. Paths are now normalised with `winslash = "/"`.
+
+## Documentation
+
+- `compute_audit_score()`, `explain_score()` and the README now state that
+  the gated score is divided by the largest gated score in the scored table,
+  so `audit_score` is relative to the top gene (LGALS3BP in the bundled
+  atlas), and that there are five audit classes, including `low`.
+- `classify_trajectory()` and `classify_protein_trajectory()` no longer say
+  the 0.85 default matches the bundled atlas: the atlas was built with 0.75.
+  The README no longer claims 0.85 is hard to reach with four points; for a
+  gene with no stage effect the best of 12 templates exceeds it about 58% of
+  the time.
+- The README, `audit/PROVENANCE.md` and vignette 7 described both PDAC
+  one-shot audits as stopped by assay coverage. Only `MSV000101183` v1_1
+  stopped at technical QC; `MSV000101183` v2 and `PXD067770` stopped because
+  the deposited outcome labels did not match the frozen dictionary or group
+  counts. The tables now list each lock with its recorded reason.
+
 # pdactrace 0.99.21
 
 **PDAC refocus: prespecification and audit layer merged in.** The PDAC

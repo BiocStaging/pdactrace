@@ -14,7 +14,12 @@
 #'
 #' @param fit A `data.table` returned by [fit_stage_de()].
 #' @param rho_cutoff Numeric. Minimum Pearson rho for assignment.
-#'   Default 0.85 (matches phase33 canonical).
+#'   Default 0.85. The bundled `pdactrace_reference` was built with a
+#'   cutoff of 0.75; pass `rho_cutoff = 0.75` to reproduce its labels.
+#'   With four points the cutoff selects a shape, not a signal: for a
+#'   gene with no stage effect the best of the 12 templates exceeds 0.85
+#'   about 58% of the time, so apply it only to LRT-significant genes
+#'   (the default `sig_only = TRUE`).
 #' @param sig_only Logical. If `TRUE` (default), restrict to
 #'   `lrt_significant == TRUE` rows.
 #' @return A `data.table` with the input plus columns:

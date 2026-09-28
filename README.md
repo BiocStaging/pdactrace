@@ -185,6 +185,7 @@ positive_score = 0.40 * evidence_strength
                + 0.35 * biological_coherence
                + 0.25 * translational_relevance
 audit_score    = positive_score * leakage_gate * heterogeneity_gate
+               / max(positive_score * leakage_gate * heterogeneity_gate)
 ```
 
 ```r
@@ -319,9 +320,14 @@ positive_score = 0.40 * evidence_strength
                + 0.35 * biological_coherence
                + 0.25 * translational_relevance
 audit_score    = positive_score * leakage_gate * heterogeneity_gate
+               / max(positive_score * leakage_gate * heterogeneity_gate)
 ```
 
-Deterministic given (gene, atlas). This scalar score is useful for
+The last line rescales by the best gated score in the scored table
+(LGALS3BP in the bundled atlas), so `audit_score` is relative to the
+top gene: 0.5 means half of the top gene's gated score, and a user
+evidence table is rescaled to its own maximum. Deterministic given
+(gene, atlas). This scalar score is useful for
 ranking and decomposition, but it is not treated as the final
 blood-biomarker claim. Claim strength is reported separately with
 `classify_claim_tier()`, strict tissue-to-serum direction evidence is
@@ -367,9 +373,12 @@ and claim tiers.
   across the three evidence axes after gate filtering. This is the
   reviewer-facing answer to the question "is this ranking just a
   consequence of scalar weights?"
-- **Trajectory cutoff (`rho_cutoff = 0.85`).** Four-point
-  z-scored profiles crowd toward 1, so 0.85 still requires the
-  gene's shape to closely follow one specific template.
+- **Trajectory cutoff (`rho_cutoff`).** `classify_trajectory()`
+  defaults to 0.85; the bundled atlas was built with 0.75, so 175
+  of its Early labels have rho between 0.75 and 0.85. The cutoff
+  picks a shape, not a signal: for a gene with no stage effect the
+  best of the 12 templates exceeds 0.85 about 58% of the time, which
+  is why templates are matched only among LRT-significant genes.
   `rna_pattern_rho` is preserved for users who want a different
   stringency. The `methodology_validation` vignette sweeps
   `rho_cutoff ∈ {0.80, 0.85, 0.90}` and confirms top-100 anchor
@@ -513,14 +522,16 @@ computed.**
 
 | Lock | Dataset | Endpoint | Terminal state |
 |---|---|---|---|
-| `MSV000101183` | MassIVE, serum | PDAC vs healthy control | inconclusive — label-blind technical QC gate failed |
-| `PXD067770` | PRIDE, serum | PDAC vs control | inconclusive — mapping/coverage gate mismatch |
+| `MSV000101183` v1.1 | MassIVE, serum | PDAC vs healthy control | inconclusive — label-blind technical QC failed (11 assay-eligible targets, pooled-QC median CV 1.0) |
+| `MSV000101183` v2 | MassIVE, serum | PDAC vs healthy control | inconclusive — outcome table carried a `pooled` term outside the frozen dictionary |
+| `PXD067770` | PRIDE, serum | PDAC vs control | inconclusive — group counts after label mapping did not match the timestamped 12/36/12 |
 
-Both died at assay coverage: the frozen candidates were not detectable at the
-required depth in undepleted public serum. That is consistent with the known
-behaviour of the serum matrix, where only a small fraction of tumour tissue
-proteins is observable at all and secreted proteins are detected far more
-readily than intracellular ones.
+They stopped for two different reasons. The MSV000101183 v1.1 lock stopped at
+assay quality: too few frozen targets were quantifiable, and reproducibly, in
+undepleted public serum, which is consistent with how few tissue proteins the
+serum matrix shows at all. The v2 lock and PXD067770 stopped on the outcome
+side: the deposited labels did not match what had been frozen, and the locked
+rule forbids repairing the mapping after the fact.
 
 These two terminations are reported here deliberately. Any result derived from
 the frozen scores inherits them, and they are the documented reason a

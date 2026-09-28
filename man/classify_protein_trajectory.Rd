@@ -13,7 +13,8 @@ classify_prot_trajectory(...)
 \item{fit}{A \code{data.table} returned by \code{\link[=fit_stage_de_protein]{fit_stage_de_protein()}}.}
 
 \item{rho_cutoff}{Numeric. Minimum Pearson rho for assignment.
-Default 0.85 (matches phase34 canonical).}
+Default 0.85. The bundled protein layer (phase34) was built with a
+cutoff of 0.75; pass \code{rho_cutoff = 0.75} to reproduce its labels.}
 
 \item{sig_only}{Logical. If \code{TRUE} (default), restrict to
 \code{lrt_significant == TRUE} rows.}

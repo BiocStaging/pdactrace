@@ -14,6 +14,7 @@
 #'                + 0.35 * biological_coherence
 #'                + 0.25 * translational_relevance
 #' audit_score    = positive_score * leakage_gate * heterogeneity_gate
+#'                  / max over the atlas of the same product
 #' ```
 #'
 #' This function reports each component, the gate state, the audit

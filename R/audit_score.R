@@ -109,10 +109,16 @@ extract_graph_features <- function(gene_symbol) {
 #' Aggregates the seven implementation features into three transparent
 #' evidence axes (`evidence_strength`, `biological_coherence`,
 #' `translational_relevance`) and applies two pre-specified reliability
-#' gates (`leakage_gate`, `heterogeneity_gate`) before computing
-#' `audit_score = positive_score * leakage_gate * heterogeneity_gate`.
-#' Each gene receives one of four `audit_class` labels:
-#' `high_confidence`, `supported_uncertain`, `penalized`, or `excluded`.
+#' gates (`leakage_gate`, `heterogeneity_gate`), then rescales by the
+#' largest gated score in the scored table:
+#' `audit_score = positive_score * leakage_gate * heterogeneity_gate / max(...)`.
+#' The score is therefore relative to the best-scoring gene of the table
+#' it is computed on (the bundled atlas by default, or `evidence`).
+#' Each gene receives one of five `audit_class` labels. Gates take
+#' precedence over the score: `excluded` (leakage gate 0), `penalized`
+#' (leakage gate below 1), `supported_uncertain` (heterogeneity gate
+#' below 1), and otherwise `high_confidence` (score >= 0.5),
+#' `supported_uncertain` (>= 0.3) or `low`.
 #'
 #' This is not a supervised biomarker predictor; the formula is
 #' pre-specified and external anchors are used only post-freeze for
@@ -129,7 +135,7 @@ extract_graph_features <- function(gene_symbol) {
 #' @return A data.table with `evidence_strength`,
 #'   `biological_coherence`, `translational_relevance`,
 #'   `leakage_gate`, `heterogeneity_gate`, `positive_score`,
-#'   `audit_score`, and `audit_class`.
+#'   `audit_score` (rescaled to the table maximum), and `audit_class`.
 #' @examples
 #' compute_audit_score(c("LGALS3BP", "LTBP1", "ALB", "GAPDH"))
 #' @export
@@ -157,7 +163,7 @@ compute_audit_score <- function(gene_symbol = NULL, evidence = NULL) {
     feat[, audit_score_v3 := 0]
   }
 
-  # 4-class assignment (locked rules; gates take precedence over score)
+  # 5-class assignment (locked rules; gates take precedence over score)
   feat[, audit_class := data.table::fcase(
     leakage_gate == 0, "excluded",
     leakage_gate < 1, "penalized",
@@ -621,8 +627,11 @@ print.pdactrace_evidence_graph <- function(x, ...) {
     score_early <- ifelse(is_early_b & !is.na(rho_p),
                           pmax(0, pmin(1, rho_p * .audit_na0(lrt_b))), 0)
     score_direction <- 0.5 * agree_p + 0.5 * cross_b
-    pos <- 0.20 * sl_b + 0.20 * score_direction +
-      0.20 * score_early + 0.10 * ss_b + 0.10 * sr_b
+    # Same 3-axis formula as compute_audit_score(); only rho, cohort
+    # agreement and I2 are perturbed.
+    pos <- 0.40 * pmin(1, sl_b + 0.5 * sr_b) +
+      0.35 * (score_direction + score_early) / 2 +
+      0.25 * ss_b
     het <- data.table::fcase(is.na(i2_p), 1.00,
                              i2_p < 50, 1.00,
                              i2_p < 70, 1.00,

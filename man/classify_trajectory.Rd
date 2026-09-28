@@ -10,7 +10,12 @@ classify_trajectory(fit, rho_cutoff = 0.85, sig_only = TRUE)
 \item{fit}{A \code{data.table} returned by \code{\link[=fit_stage_de]{fit_stage_de()}}.}
 
 \item{rho_cutoff}{Numeric. Minimum Pearson rho for assignment.
-Default 0.85 (matches phase33 canonical).}
+Default 0.85. The bundled \code{pdactrace_reference} was built with a
+cutoff of 0.75; pass \code{rho_cutoff = 0.75} to reproduce its labels.
+With four points the cutoff selects a shape, not a signal: for a
+gene with no stage effect the best of the 12 templates exceeds 0.85
+about 58\% of the time, so apply it only to LRT-significant genes
+(the default \code{sig_only = TRUE}).}
 
 \item{sig_only}{Logical. If \code{TRUE} (default), restrict to
 \code{lrt_significant == TRUE} rows.}
