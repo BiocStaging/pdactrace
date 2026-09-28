@@ -69,7 +69,16 @@
 #'     (chr) (T2.5)}
 #'   \item{prot_tier}{Tier1 gold / Tier2 silver / NA (chr) (T2.5)}
 #'   \item{rnaprot_concordant}{RNA pattern == Protein pattern (lgl) (T2.5)}
-#'   \item{cell_origin_top}{dominant scRNA cell type (chr) (T2.5)}
+#'   \item{cell_origin_top}{dominant scRNA cell type (chr) (T2.5). Computed
+#'     only for the top 300 genes of an earlier candidate ranking (the
+#'     "Phase 2D" `final_score`; 293 are in the atlas). The script that
+#'     computed that ranking was not retained; by the author's account it
+#'     combined tissue stage effects with serum detection and used no
+#'     literature or known-marker list. For every other gene the value is
+#'     `NA` because the gene was not queried, not because it lacks
+#'     cell-type-specific expression. 11 of the 18 secondary-tier anchors
+#'     are among the 293, which accounts for much of the top-100 anchor
+#'     enrichment (see the README)}
 #'   \item{cell_origin_distrib}{list-column of full % distribution
 #'     (list) (T2.5)}
 #'   \item{cell_origin_padj}{hypergeometric enrichment padj (num) (T2.5)}

@@ -180,6 +180,10 @@ ref[, prot_tier := fcase(
   default = NA_character_)]
 
 # ── 4. scRNA cell origin (phase2c) ───────────────────────────
+# phase2c covers only the top 300 genes of the Phase 2D candidate ranking
+# (final_score; tissue stage effects plus serum detection, by the author's
+# account; the script that produced it was not retained). All other genes
+# get NA here because they were not queried.
 cat("[4/8] phase2c scRNA cell origin + tau ...\n")
 p2c <- read_phase("phase2c_celltype_specificity")
 ct_cols <- grep("^mean_", names(p2c), value = TRUE)

@@ -1,3 +1,28 @@
+# pdactrace 0.99.24
+
+## Documentation
+
+- The weight-sensitivity section of the `methodology_validation` vignette
+  reported the same top-100 anchor enrichment (7 hits, 39.3x) for every
+  weight profile, including single-axis extremes, and concluded that the
+  ranking is "fundamentally insensitive" to the weights. The sweep was a
+  no-op: it wrote a reweighted `audit_score` into the atlas and passed it to
+  `evaluate_anchor_enrichment()`, which recomputes `audit_score` with the
+  frozen weights. Ranked directly, the profiles give 7, 6, 1, 5 and 6 hits
+  (biological-coherence-only: 5.6x, not significant). The section now
+  ranks the reweighted score itself and states that the enrichment depends
+  on the weights; across the simplex the top-100 hit count ranges from 1 to
+  8.
+- The README said that vignette re-evaluates the anchor enrichment at other
+  template cutoffs; it only counts the genes that clear each cutoff.
+- `?pdactrace_reference` and the README now document that the scRNA
+  cell-origin layer exists only for the 300 genes of an earlier candidate
+  ranking (Phase 2D; tissue stage effects plus serum detection by the
+  author's account, no literature or known-marker list; its script was not
+  retained). 11 of the 18 secondary anchors are among them. Within those
+  genes the top-100 enrichment is 1.9x (p = 0.04); with the scRNA layer
+  removed from the score it is 16.9x (3 hits).
+
 # pdactrace 0.99.23
 
 ## Changed

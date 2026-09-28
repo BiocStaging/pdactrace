@@ -106,47 +106,44 @@ weight_grid <- list(
   trans_only    = c(0.00, 0.00, 1.00),  # extreme: only serum reach
   inverted      = c(0.25, 0.35, 0.40))  # default reversed
 
+# Rank the reweighted score directly. (evaluate_anchor_enrichment()
+# recomputes audit_score with the frozen weights, so it cannot be used
+# to evaluate a different weighting.)
+sec <- intersect(pdactrace_external_anchors$gene[
+  pdactrace_external_anchors$include_secondary_eval], ref$gene_symbol)
 weight_eval <- rbindlist(lapply(names(weight_grid), function(nm) {
   w <- weight_grid[[nm]]
-  pos <- w[1] * sub$ev_strength + w[2] * sub$bio_coh +
-         w[3] * sub$trans_rel
-  pos[!is.finite(pos)] <- 0
-  scored <- copy(ref)
-  scored[, audit_score := pos * sub$leak_mult * sub$het_mult]
-  enr <- evaluate_anchor_enrichment(top_n = 100, tier = "secondary",
-                                     evidence = scored)
+  score <- (w[1] * sub$ev_strength + w[2] * sub$bio_coh +
+            w[3] * sub$trans_rel) * sub$leak_mult * sub$het_mult
+  top <- sub$gene_symbol[order(-score)][seq_len(100)]
+  hits <- sum(top %in% sec)
+  expect <- 100 * length(sec) / nrow(sub)
   data.table(profile = nm,
              weights = paste(sprintf("%.2f", w), collapse = "/"),
-             hits    = enr$hits,
-             fold    = round(enr$fold, 1),
-             pval    = formatC(enr$pval, format = "g", digits = 2))
+             hits    = hits,
+             fold    = round(hits / expect, 1),
+             pval    = formatC(stats::phyper(hits - 1, length(sec),
+                                             nrow(sub) - length(sec), 100,
+                                             lower.tail = FALSE),
+                               format = "g", digits = 2))
 }))
 print(weight_eval)
 ```
 
-**Interpretation.** Top-100 anchor enrichment is identical
-(`fold = 39.3`, `p = 2.2e-10`) across the **entire weight
-simplex** -- including single-axis extremes (1.00 / 0 / 0) and
-the default-inverted profile (0.25 / 0.35 / 0.40). The framework
-is therefore **fundamentally insensitive to the precise weight
-choice** within the simplex. Two reasons drive this robustness:
-
-1. **Multiplicative gates dominate the ranking.** The leakage
-   gate (multiplier in `{0.0, 0.5, 1.0}`) and heterogeneity gate
-   (multiplier in `{0.3, 0.7, 1.0}`) collapse a large fraction
-   of the atlas to small or zero scores; the top-100 set is
-   determined more by which genes survive both gates than by
-   how the surviving gene's three axis scores are weighted.
-2. **The three axes are positively correlated** in the bundled
-   atlas (a gene with strong layer presence tends to have strong
-   biological coherence and translational reach). Any weighted
-   sum therefore produces a similar ranking.
-
-This is a **strong defense against the "why those exact weights?"
-reviewer question**: the answer is that the framework's
-robustness does not come from precise weight tuning, but from
-the gate structure plus axis correlation in the underlying
-biology.
+**Interpretation.** The top-100 enrichment does depend on the
+weights. The default (7 hits, 39.3x) sits at the favourable end:
+evidence-strength-only and the inverted profile give 6 hits (33.7x),
+translational-relevance-only gives 5 (28.1x), and
+biological-coherence-only gives 1 (5.6x, not significant). Ranking on
+the evidence-strength axis alone also leaves 23 genes tied at the
+100th score, so its hit count depends on tie order. Across 1,000
+weight vectors drawn uniformly on the simplex (with a 0.05 floor, as
+in `run_weight_robustness()`), the top-100 hit count ranges from 1 to
+8 and reaches 7 or more for about a third of them. The weights were
+fixed before the anchors were scored, but the headline figure should
+be read as one point on this range rather than as weight-invariant;
+`run_weight_robustness()` and the weight-free Pareto layers report the
+per-gene view.
 
 # Section B -- Tool comparison
 

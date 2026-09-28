@@ -33,6 +33,13 @@ ranks **7 of the curated secondary-tier external anchor biomarkers
 in the top 100** candidates (39.3x hypergeometric enrichment,
 p = 2.18e-10; LOO median 41.6x; bootstrap 95% CI [20.2, 56.3]).
 This is a sanity check, not a fully-blinded external validation.
+Much of it comes through the scRNA cell-origin layer, which exists
+only for the 300 genes of an earlier candidate ranking that included
+serum detection; 11 of the 18 anchors are among them. Within those
+genes the top-100 enrichment is 1.9x (7 of 11 anchors, p = 0.04), and
+removing the scRNA layer from the score leaves 3 hits (16.9x). The
+figure also depends on the weights: across the weight simplex the
+top-100 hit count ranges from 1 to 8.
 
 The bundled PDAC reference atlas is the focus of this release.
 The API is designed so the same evidence-aggregation and audit
@@ -385,9 +392,9 @@ and claim tiers.
   best of the 12 templates exceeds 0.85 about 58% of the time, which
   is why templates are matched only among LRT-significant genes.
   `rna_pattern_rho` is preserved for users who want a different
-  stringency. The `methodology_validation` vignette sweeps
-  `rho_cutoff ∈ {0.80, 0.85, 0.90}` and confirms top-100 anchor
-  enrichment is robust.
+  stringency. The `methodology_validation` vignette reports how many
+  genes clear `rho_cutoff ∈ {0.80, 0.85, 0.90}`; it does not re-run
+  the anchor evaluation at other cutoffs.
 - **Leakage gate.** housekeeping flag → `0.00` (housekeeping is
   invariant by definition; trajectory signal is artefactual);
   plasma_high_abundance flag → `0.50` (top-decile plasma proteins
