@@ -48,6 +48,22 @@ test_that("compute_trace_d direction consensus + class assignment", {
                c("UP", "DOWN", NA_character_, "UP", "UP", "UP", "UP"))
 })
 
+test_that("compute_trace_d does not infer specificity from a missing value", {
+  toy <- data.table::data.table(
+    gene_symbol = c("pan_missing", "serum_missing"),
+    rna_pattern = "Early_Burst_Up", prot_pattern = "Early_Burst_Up",
+    max_abs_beta_meta = 1,
+    serum_log2fc_PDAC_vs_HC = c(0.8, NA),
+    serum_log2fc_Pan_vs_HC = NA_real_,
+    serum_detected = TRUE
+  )
+  out <- compute_trace_d(atlas = toy)
+  expect_equal(out$tracd_class, c("A", "C"))
+  expect_equal(out$tracd_pancreatitis_specificity, c("ambiguous", "ambiguous"))
+  expect_true(is.na(out$tracd_pancreatitis_overlap_score[1]))
+  expect_match(out$tracd_decision_path[2], "serum_unmeasured")
+})
+
 test_that("compute_trace_d confidence formula respects weights", {
   toy <- data.table::data.table(
     gene_symbol = "X",

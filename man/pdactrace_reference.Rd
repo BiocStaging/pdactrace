@@ -14,6 +14,12 @@ columns (T2.5 = populated / T3 = NA placeholder):
 \item{rna_lrt_padj}{DESeq2 LRT BH-adjusted p-value (num) (T2.5)}
 \item{rna_beta_N, rna_beta_E, rna_beta_M, rna_beta_L}{
 log2FC stage coefficients vs Normal (num) (T2.5)}
+\item{rna_padj_E, rna_padj_M, rna_padj_L}{copies of \code{rna_lrt_padj}
+(the omnibus stage LRT), kept for backward compatibility. They
+are \strong{not} stage-specific; use \code{rna_wald_padj_E/M/L} for those
+(num) (T2.5)}
+\item{rna_wald_padj_E, rna_wald_padj_M, rna_wald_padj_L}{BH-adjusted
+Wald p-values of each stage vs Normal (num)}
 \item{rna_pattern}{Surfaced atlas call: Early × 4 best-match label
 (chr) or NA if the 12-template best-match was Mid / Late /
 Monotonic / Unclassified (T2.5)}
@@ -39,9 +45,16 @@ Monotonic_* (v0.4.0) (lgl) (T2.5)}
 \item{cell_origin_padj}{hypergeometric enrichment padj (num) (T2.5)}
 \item{serum_detected}{detected in >=1 of 3 serum cohorts (lgl) (T2.5)}
 \item{serum_n_cohorts_detected}{0-3 (int) (T2.5)}
-\item{serum_log2fc_PDAC_vs_HC}{log2FC PDAC vs HC (num) (T2.5)}
-\item{serum_log2fc_Pan_vs_HC}{log2FC Pancreatitis vs HC (num) (T2.5)}
-\item{translation_class}{"A" / "B" / "C" / NA (chr) (T2.5)}
+\item{serum_log2fc_PDAC_vs_HC}{log2FC PDAC vs HC (num): the
+single-cohort phase42 difference where available (19 genes),
+otherwise the pooled phase77 log2FC (19 genes); read by strict
+TRACE-D (T2.5)}
+\item{serum_log2fc_Pan_vs_HC}{log2FC Pancreatitis vs HC (num);
+phase42 genes only (T2.5)}
+\item{translation_class}{"A" / "B" / "C" / NA (chr) (T2.5). Legacy
+annotation: A/B record only the sign of the phase77 serum change
+relative to tissue (not its size or significance); C marks a phase42
+gene outside phase77. Not used by \code{classify_claim_tier()}.}
 \item{phase77_strict}{member of 22 strict candidates (lgl) (T2.5)}
 \item{resectable_marker}{member of phase29 25 markers (lgl) (T2.5)}
 \item{panel_member}{member of LTBP1+SERPINA1 / CA19-9 hybrid (lgl) (T2.5)}
@@ -55,6 +68,14 @@ Monotonic_* (v0.4.0) (lgl) (T2.5)}
 (chr) (NA in T2.5)}
 \item{model_trainable}{T3 training-set inclusion flag (lgl)
 (NA in T2.5)}
+\item{audit_is_plasma_high_abundance}{member of
+\code{data-raw/external_negatives_hard_plasma.csv} (Anderson & Anderson
+2002 selection), minus proteins that are also external anchors
+(APOA2, TTR). The list is curated, not a concentration cut-off:
+SERPINA1 is a high-abundance acute-phase protein but is not on it
+and so keeps a leakage gate of 1. Adding it would give an audit
+score of 0.32 (\code{penalized}) and 6 rather than 7 anchor hits in the
+top 100. The list is kept as frozen before scoring (lgl)}
 \item{audit_*}{v0.3.0 3-axis + 2-gate audit score, five-label
 \code{audit_class} (\code{high_confidence}, \code{supported_uncertain},
 \code{penalized}, \code{excluded}, \code{low}), Monte Carlo uncertainty, and

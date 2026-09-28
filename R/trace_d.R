@@ -103,8 +103,8 @@ compute_trace_d <- function(atlas = NULL,
                        dt$max_abs_beta_meta)
   tissue_signal <- !is.na(tissue_dir) & tissue_mag >= tau_tissue
   serum_detected <- !is.na(dt$serum_detected) & dt$serum_detected
-  serum_pdac <- ifelse(is.na(dt$serum_log2fc_PDAC_vs_HC), 0,
-                       dt$serum_log2fc_PDAC_vs_HC)
+  serum_measured <- !is.na(dt$serum_log2fc_PDAC_vs_HC)
+  serum_pdac <- ifelse(serum_measured, dt$serum_log2fc_PDAC_vs_HC, 0)
   serum_signal <- serum_detected & abs(serum_pdac) >= tau_serum
 
   # ─── Class assignment ────────────────────────────────────────
@@ -139,8 +139,8 @@ compute_trace_d <- function(atlas = NULL,
   }
 
   # ─── Pancreatitis specificity (annotation only) ─────────────
-  serum_pan <- ifelse(is.na(dt$serum_log2fc_Pan_vs_HC), 0,
-                      dt$serum_log2fc_Pan_vs_HC)
+  pan_measured <- !is.na(dt$serum_log2fc_Pan_vs_HC)
+  serum_pan <- ifelse(pan_measured, dt$serum_log2fc_Pan_vs_HC, 0)
   eps <- 1e-6
   overlap_raw <- abs(serum_pan) / pmax(abs(serum_pdac), eps)
   sign_match <- (sign(serum_pdac) == sign(serum_pan)) & serum_pdac != 0
@@ -148,6 +148,8 @@ compute_trace_d <- function(atlas = NULL,
   overlap_score[serum_signal & sign_match] <-
     pmin(1, overlap_raw[serum_signal & sign_match])
   overlap_score[serum_signal & !sign_match] <- 0
+  # No pancreatitis measurement is not evidence of PDAC specificity.
+  overlap_score[!pan_measured] <- NA_real_
 
   specificity <- rep(NA_character_, n)
   specificity[!serum_signal] <- "ambiguous"
@@ -180,8 +182,10 @@ compute_trace_d <- function(atlas = NULL,
                         paste0("tissue_", tissue_dir))
   path_serum <- ifelse(serum_signal,
                        paste0("serum_", serum_dir),
-                       ifelse(serum_detected, "serum_subthr",
-                              "serum_absent"))
+                       ifelse(serum_detected & !serum_measured,
+                              "serum_unmeasured",
+                              ifelse(serum_detected, "serum_subthr",
+                                     "serum_absent")))
   path_class <- ifelse(is.na(tracd_class), "->NA",
                        paste0("->", tracd_class))
   path_pan <- paste0(",pan_", specificity)

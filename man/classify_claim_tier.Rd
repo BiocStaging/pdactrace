@@ -22,10 +22,12 @@ thresholds are computed on the supplied atlas, then filtered.}
 \code{\link[=compute_trace_d]{compute_trace_d()}}.}
 
 \item{tau_serum}{Minimum absolute serum log2 fold-change used by
-\code{\link[=compute_trace_d]{compute_trace_d()}} and the serum-signal flag. Claim-tier
-classification calls TRACE-D in \code{legacy_translation = "fallback"}
-mode so the bundled atlas' historical \code{translation_class} remains
-visible when serum log2FC is unavailable.}
+\code{\link[=compute_trace_d]{compute_trace_d()}} and the serum-signal flag. Claim tiers use
+strict TRACE-D only: a gene is \code{serum_concordant} when its measured
+serum log2FC passes \code{tau_serum} in the tissue direction. The
+historical \code{translation_class} label, which records only the sign of
+the serum change, is returned as \code{legacy_translation_class} for
+reference and does not raise the tier.}
 }
 \value{
 A data.table with one row per gene and claim audit columns.

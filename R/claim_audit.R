@@ -12,10 +12,12 @@
 #' @param tau_tissue Minimum absolute tissue effect used by
 #'   [compute_trace_d()].
 #' @param tau_serum Minimum absolute serum log2 fold-change used by
-#'   [compute_trace_d()] and the serum-signal flag. Claim-tier
-#'   classification calls TRACE-D in `legacy_translation = "fallback"`
-#'   mode so the bundled atlas' historical `translation_class` remains
-#'   visible when serum log2FC is unavailable.
+#'   [compute_trace_d()] and the serum-signal flag. Claim tiers use
+#'   strict TRACE-D only: a gene is `serum_concordant` when its measured
+#'   serum log2FC passes `tau_serum` in the tissue direction. The
+#'   historical `translation_class` label, which records only the sign of
+#'   the serum change, is returned as `legacy_translation_class` for
+#'   reference and does not raise the tier.
 #' @return A data.table with one row per gene and claim audit columns.
 #' @examples
 #' classify_claim_tier(genes = c("LGALS3BP", "LTBP1", "ALB", "GAPDH"))
@@ -40,7 +42,7 @@ classify_claim_tier <- function(atlas = NULL,
 
   trace <- compute_trace_d(ref, tau_tissue = tau_tissue,
                            tau_serum = tau_serum,
-                           legacy_translation = "fallback")
+                           legacy_translation = "strict")
   score <- compute_audit_score(NULL, evidence = ref)
   score <- score[, .(gene_symbol,
                      audit_score_det = audit_score,
@@ -64,12 +66,8 @@ classify_claim_tier <- function(atlas = NULL,
     (!is.na(dt$translation_class) & nzchar(dt$translation_class))
   serum_fc <- ifelse(is.na(dt$serum_log2fc_PDAC_vs_HC), 0,
                      dt$serum_log2fc_PDAC_vs_HC)
-  serum_signal <- serum_observed &
-    (abs(serum_fc) >= tau_serum |
-       (!is.na(dt$translation_class) & nzchar(dt$translation_class)) |
-       (!is.na(dt$tracd_class) & nzchar(dt$tracd_class)))
-  serum_concordant <- dt$tracd_class == "A" | dt$translation_class == "A"
-  serum_concordant[is.na(serum_concordant)] <- FALSE
+  serum_signal <- serum_observed & abs(serum_fc) >= tau_serum
+  serum_concordant <- dt$tracd_class %in% "A"
 
   exportable_plausible <- (!is.na(dt$flt_signal_peptide) &
                              dt$flt_signal_peptide) |
@@ -100,12 +98,9 @@ classify_claim_tier <- function(atlas = NULL,
     default = "none")
 
   translation_status <- data.table::fcase(
-    dt$tracd_class == "A" | dt$translation_class == "A",
-    "direction_preserved",
-    dt$tracd_class == "B" | dt$translation_class == "B",
-    "direction_inverted",
-    dt$tracd_class == "C" | dt$translation_class == "C",
-    "decoupled_or_unobserved",
+    dt$tracd_class %in% "A", "direction_preserved",
+    dt$tracd_class %in% "B", "direction_inverted",
+    dt$tracd_class %in% "C", "decoupled_or_unobserved",
     serum_signal, "serum_observed_no_tissue_direction",
     tissue_supported, "translation_unknown",
     default = "insufficient_tissue_evidence")
@@ -150,6 +145,7 @@ classify_claim_tier <- function(atlas = NULL,
     confounder_risk = confounder_risk,
     tracd_class = dt$tracd_class,
     tracd_confidence = dt$tracd_confidence,
+    legacy_translation_class = dt$translation_class,
     audit_class = dt$audit_class_det,
     audit_score = dt$audit_score_det,
     claim_reason = claim_reason)

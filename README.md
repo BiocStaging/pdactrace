@@ -116,9 +116,10 @@ res <- project_user_cohort(rna = my_counts, coldata = my_cd,
   into a single candidate/non-candidate label.
 - **TRACE-D translation algorithm** — `compute_trace_d()` assigns
   A/B/C tissue-to-serum direction classes in strict mode using
-  measured serum log2FC. The optional `legacy_translation =
-  "fallback"` mode preserves historical `translation_class`
-  annotations for backward-compatible reporting.
+  measured serum log2FC. Claim tiers use strict mode only. The
+  optional `legacy_translation = "fallback"` mode preserves the
+  historical `translation_class` annotation, which records only the
+  sign of the serum change, for backward-compatible reporting.
 - **Weight robustness and Pareto support** —
   `run_weight_robustness()` samples plausible 3-axis weight
   vectors, while `compute_pareto_class()` and
@@ -141,10 +142,14 @@ res <- project_user_cohort(rna = my_counts, coldata = my_cd,
   visual canvas (`viz_gene()`), and a user-cohort wrapper
   (`project_user_cohort()`).
 - Four canonical case studies illustrate both score classes and
-  claim tiers: LGALS3BP (`serum_concordant`), LTBP1
-  (`serum_observed`, Class B inverse), ALB (`confounded`,
-  plasma-high gate), and GAPDH (`excluded`, housekeeping gate).
-  No single gene is treated as a flagship.
+  claim tiers: LGALS3BP (top audit score, but `exportable_plausible`:
+  its serum change, log2FC 0.035, is below the strict threshold),
+  LTBP1 (`serum_observed`; serum moves opposite to tissue, but its
+  tissue meta-effect is too small for a strict direction call), ALB
+  (`confounded`, plasma-high gate), and GAPDH (`excluded`,
+  housekeeping gate). SERPINA1 is a `serum_concordant` example
+  (serum log2FC 0.753, adjusted p 7.7e-12). No single gene is treated
+  as a flagship.
 
 **Core finding:** *a stage-aware tissue biomarker claim and a
 blood-biomarker claim are not equivalent.* Tissue signals can
@@ -588,11 +593,14 @@ size.
 - **Tissue evidence is not blood validation.** Claim tiers keep
   tissue dysregulation, exportability, serum observability,
   direction concordance, and confounding risk separate.
-- **Strict TRACE-D is the official algorithm.** The
-  `legacy_translation = "fallback"` mode exists for compatibility
-  with the historical atlas `translation_class` column and should
-  be described as an annotation fallback, not as additional serum
-  evidence.
+- **Strict TRACE-D is the official algorithm**, and the only one
+  claim tiers use. The `legacy_translation = "fallback"` mode exists
+  for compatibility with the historical atlas `translation_class`
+  column and should be described as an annotation fallback, not as
+  additional serum evidence.
+- **The plasma high-abundance gate covers a curated list**, not every
+  abundant protein. SERPINA1 is not on it; see
+  `?pdactrace_reference` for the effect of adding it.
 - **No supervised classifier shipped.** All ML is opt-in and
   user-trained on user-supplied labels; the package distributes
   no pretrained predictor.

@@ -212,6 +212,7 @@ p77 <- read_phase("phase77_strict_RNAprotConvergent_serum")
 # translation_class assignment is direction-based (NOT padj-gated) per
 # manuscript canonical phrasing; LTBP1 (vs_serum=Opposite, padj NA) is
 # explicitly Class B exemplar.
+p77_fc <- p77[, .(gene_symbol = gene, p77_log2fc = serum_logFC)]
 p77 <- p77[, .(gene_symbol = gene,
                 phase77_strict = TRUE,
                 translation_class = fcase(
@@ -236,6 +237,13 @@ ref[, serum_detected := !is.na(serum_log2fc_PDAC_vs_HC) | phase77_strict]
 ref[, serum_n_cohorts_detected := fifelse(
   !is.na(serum_log2fc_PDAC_vs_HC), 1L, 0L) +
   fifelse(phase77_strict, 1L, 0L)]
+
+# serum_log2fc_PDAC_vs_HC: phase42 (one cohort) where available, otherwise
+# the pooled phase77 log2FC, so that strict TRACE-D can see every
+# serum-detected gene. Pancreatitis log2FC exists only for phase42 genes.
+ref <- merge(ref, p77_fc, by = "gene_symbol", all.x = TRUE)
+ref[is.na(serum_log2fc_PDAC_vs_HC), serum_log2fc_PDAC_vs_HC := p77_log2fc]
+ref[, p77_log2fc := NULL]
 
 # ── 6. Resectable markers (phase29) ──────────────────────────
 cat("[6/8] phase29 resectable markers ...\n")
@@ -301,7 +309,7 @@ ref[, provenance := {
   if (!is.na(prot_pattern_8))           parts <- c(parts, "phase34")
   if (!is.na(rna_stouffer_z))           parts <- c(parts, "stouffer_consistency")
   if (!is.na(cell_origin_top))          parts <- c(parts, "phase2c")
-  if (!is.na(serum_log2fc_PDAC_vs_HC))  parts <- c(parts, "phase42")
+  if (!is.na(ann_hc_mean))              parts <- c(parts, "phase42")
   if (!is.na(flt_signal_peptide))       parts <- c(parts, "phase60")
   if (phase77_strict)                    parts <- c(parts, "phase77")
   if (resectable_marker)                 parts <- c(parts, "phase29")

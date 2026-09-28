@@ -1,3 +1,45 @@
+# pdactrace 0.99.23
+
+## Changed
+
+- `classify_claim_tier()` now uses strict TRACE-D only. A gene is
+  `serum_concordant` only when its measured serum log2FC reaches
+  `tau_serum` in the tissue direction, and `translation_status` follows the
+  same strict class. Previously the legacy `translation_class` label could
+  override a strict class C, although that label records only the sign of
+  the phase77 serum change, not its size or significance. The legacy label
+  is still returned, as `legacy_translation_class`, and does not raise the
+  tier. Strict class C is no longer counted as a serum signal.
+- Effect on the bundled atlas: `serum_concordant` 8 -> 6 (LGALS3BP, log2FC
+  0.035, adjusted p 0.81, and FN1, 0.006, move to `exportable_plausible`);
+  `serum_observed` 13 -> 9 (ECM1, FBLN1, GGH, LCN2 move to
+  `exportable_plausible`). LTBP1, SPARC and TAGLN2 stay `serum_observed`,
+  but their `translation_status` is `serum_observed_no_tissue_direction`
+  rather than `direction_inverted`: their serum change opposes tissue, but
+  their tissue meta-effect is below `tau_tissue`. Audit scores, audit
+  classes and the anchor enrichment are unchanged.
+- `serum_log2fc_PDAC_vs_HC` in `pdactrace_reference` now holds the pooled
+  phase77 log2FC for the 19 serum-detected genes that had no phase42 value,
+  so strict TRACE-D sees all 38 serum-detected genes (19 before). No other
+  column changed. The rule is in `data-raw/build_reference.R`;
+  `data-raw/attach_phase77_serum_log2fc.R` applied it to the shipped atlas.
+
+## Bug fixes
+
+- `compute_trace_d()` treated a missing pancreatitis log2FC as 0 and could
+  call such a gene `pdac_specific`; it is now `ambiguous`. A serum-detected
+  gene with no measured log2FC is recorded as `serum_unmeasured` in
+  `tracd_decision_path` instead of `serum_subthr`.
+
+## Documentation
+
+- `?pdactrace_reference` documents that `rna_padj_E/M/L` are copies of the
+  omnibus LRT padj (stage-specific values are `rna_wald_padj_*`), where each
+  serum log2FC comes from, what `translation_class` does and does not
+  encode, and that the plasma high-abundance gate is a curated list:
+  SERPINA1 is not on it (adding it would give 0.32, `penalized`, and 6
+  rather than 7 anchor hits in the top 100); the list is kept as frozen.
+
 # pdactrace 0.99.22
 
 ## Bug fixes

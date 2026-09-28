@@ -7,11 +7,25 @@ test_that("classify_claim_tier returns expected bundled-gene tiers", {
                  "serum_observed", "serum_signal",
                  "serum_concordant", "translation_status",
                  "confounder_risk", "tracd_class", "tracd_confidence",
+                 "legacy_translation_class",
                  "audit_class", "audit_score", "claim_reason"))
   expect_equal(out[gene_symbol == "GAPDH", claim_tier], "excluded")
   expect_equal(out[gene_symbol == "ALB", claim_tier], "confounded")
-  expect_true(out[gene_symbol == "LGALS3BP", claim_strength] >=
-                out[gene_symbol == "LTBP1", claim_strength])
+  # Strict TRACE-D only: LGALS3BP's serum log2FC (0.035) is below
+  # tau_serum, so its legacy "A" label no longer raises the tier.
+  expect_equal(out[gene_symbol == "LGALS3BP", claim_tier],
+               "exportable_plausible")
+  expect_equal(out[gene_symbol == "LGALS3BP", legacy_translation_class], "A")
+  expect_equal(out[gene_symbol == "LTBP1", claim_tier], "serum_observed")
+})
+
+test_that("serum_concordant requires a strict TRACE-D class A", {
+  out <- classify_claim_tier()
+  expect_setequal(out[claim_tier == "serum_concordant", gene_symbol],
+                  c("C4BPB", "C8B", "HBB", "SELENOP", "SERPINA1", "TGFBI"))
+  expect_true(all(out[claim_tier == "serum_concordant", tracd_class] == "A"))
+  sa1 <- out[gene_symbol == "SERPINA1"]
+  expect_equal(sa1$translation_status, "direction_preserved")
 })
 
 test_that("classify_claim_tier separates tissue support from blood claim", {
