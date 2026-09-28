@@ -1,3 +1,28 @@
+# pdactrace 0.99.25
+
+## Changed
+
+- The seven audit feature columns of `pdactrace_reference`
+  (`audit_score_layer`, `_direction`, `_early`, `_serum`, `_rescue`, the
+  gate multipliers and flags) were frozen at v0.3.0, before the 12-template
+  catalog. 286 genes whose best RNA template became Monotonic (284) or Late
+  (2) therefore kept Early-onset and RNA-layer credit, and genes whose
+  protein label changed kept their old layer and direction credit. The
+  columns are now recomputed from the atlas's current labels with the same
+  code that scores a user evidence table, so atlas and user scores follow
+  one rule. `data-raw/attach_audit_columns.R`, which previously copied the
+  v0.3.0 CSV, now does this recomputation.
+- Effect: 310 genes change score; 71 change class (60
+  `supported_uncertain` -> `low`, 9 `high_confidence` -> `low`, NCAPG and
+  IQGAP3 `high_confidence` -> `supported_uncertain`). Class counts are now
+  `high_confidence` 370, `supported_uncertain` 7941, `low` 1749,
+  `penalized` 22, `excluded` 31. The top gene, the four case-study genes,
+  SERPINA1 and the anchor enrichment (7 hits in the top 100, 39.3x;
+  leave-one-out median 41.6x; bootstrap 95% CI 20.2-56.3) are unchanged,
+  and the top 100 differs by one gene. Monte Carlo columns were
+  regenerated (`stable_high` 153, `high_uncertain` 620, `medium` 502,
+  `low` 8807).
+
 # pdactrace 0.99.24
 
 ## Documentation
